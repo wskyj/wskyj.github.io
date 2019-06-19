@@ -4,8 +4,15 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, seven">
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex">
+    <meta name="keywords" content="zookeeper, seven">
+    <meta name="description" content="Day1:手写zk配置中心
+入门
+zk分布式经典应用场景-配置中心
+手写配置中心
+zk特性揭秘
+
+一、简介简介：zookeeper提供了一种集中式信息存储服务，可以看做是一个数据库。
+特点：数据存储在内存中，类似文件系统的树形结构(文件和目">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Hello World | seven</title>
+    <title>zookeeper | seven</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -257,13 +264,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Hello World
+                        zookeeper
                     </div>
                 </div>
             </div>
@@ -372,9 +379,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/zookeeper/" target="_blank">
+                                <span class="chip bg-color">zookeeper</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -385,7 +396,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-12
+                    2019-06-18
                 </div>
 
                 
@@ -401,15 +412,49 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <h2 id="Day1-手写zk配置中心"><a href="#Day1-手写zk配置中心" class="headerlink" title="Day1:手写zk配置中心"></a>Day1:手写zk配置中心</h2><ul>
+<li>入门</li>
+<li>zk分布式经典应用场景-配置中心</li>
+<li>手写配置中心</li>
+<li>zk特性揭秘</li>
+</ul>
+<h3 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h3><p>简介：zookeeper提供了一种集中式信息存储服务，可以看做是一个数据库。</p>
+<p>特点：数据存储在内存中，类似文件系统的树形结构(文件和目录)</p>
+<h3 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h3><h4 id="1-单机版安装："><a href="#1-单机版安装：" class="headerlink" title="1.单机版安装："></a>1.单机版安装：</h4><pre><code>    复制zoo.cfg配置文件，即可安装。</code></pre><h3 id="三-基础"><a href="#三-基础" class="headerlink" title="三.基础"></a>三.基础</h3><h4 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1.常用命令"></a>1.常用命令</h4><p>可使用help获取命令指南：</p>
+<ul>
+<li>​        <em>ls 获取子节点</em><br>   ​        <em>create 创建节点</em></li>
+<li><em>delete 删除节点，无法删除带子节点的节点</em></li>
+<li><em>rmr 删除节点，包括子节点</em></li>
+<li><em>get 从指定节点读取数据</em></li>
+<li><em>set  将数据存入指定节点</em></li>
+<li><em>ls2 查询指定节点之下的子节点，包括节点的元数据信息</em></li>
+<li><em>sync 等待数据进行同步</em></li>
+</ul>
+<h3 id="2-znode-构成"><a href="#2-znode-构成" class="headerlink" title="2.znode-构成"></a>2.znode-构成</h3><ul>
+<li><em>节点数据：存储的协调数据（状态信息、配置、位置信息等）</em></li>
+<li><em>节点元数据：（stat结构）</em></li>
+<li><em>数据大小上限：1M</em> </li>
+</ul>
+<h3 id="3-stat结构"><a href="#3-stat结构" class="headerlink" title="3.stat结构"></a>3.stat结构</h3><p>节点上的元数据信息</p>
+<p>cZxid 创建该节点的zxid</p>
+<p>ctime    该节点的创建时间</p>
+<p>mZxid 该节点的最后修改zxid</p>
+<p>mtime 该节点的最后修改时间</p>
+<p>pZxid 该节点的最后子节点修改zxid</p>
+<p>cversion 该节点的子节点变更次数</p>
+<p>dataVersion 该节点数据被修改次数</p>
+<p>aclVersion 该节点的ACL变更次数</p>
+<p>ephemeralOwner 临时节点所有者会话ID，非临时节点为0</p>
+<p>dataLength 该节点数据长度</p>
+<p>numChildren 子节点数</p>
+<p><strong><em>除了ephemeralOwner、dataLength、numChild，其他属性都体现了顺序</em></strong></p>
+<h3 id="4-znode-节点类型"><a href="#4-znode-节点类型" class="headerlink" title="4.znode-节点类型"></a>4.znode-节点类型</h3><p><img src="https://t1.picb.cc/uploads/2019/06/18/gudGx6.png" alt="gudGx6.png"></p>
+<h3 id="5-临时节点-session"><a href="#5-临时节点-session" class="headerlink" title="5.临时节点-session"></a>5.临时节点-session</h3><h2 id><a href="#" class="headerlink" title></a><img src="https://t1.picb.cc/uploads/2019/06/18/gudpyi.png" alt="gudpyi.png"></h2><ul>
+<li>一个客户端连接一个会话，由zk分配唯一的会话id</li>
+<li>客户端以特定的时间间隔发送心跳以保持会话有效，ticktime</li>
+<li>超过会话超时时间未收到客户端的心跳，则判断客户端死了；默认2倍ticktime</li>
+<li>会话中的请求按fifo顺序执行</li>
+</ul>
 
             </div>
             <hr>
@@ -565,9 +610,9 @@
             </div>
             <br>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
-                    《Hello World》
+                    《zookeeper》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/12/hello-world/" property="cc:attributionName" rel="cc:attributionURL">
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/18/zookeeper/" property="cc:attributionName" rel="cc:attributionURL">
                 keyj
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
@@ -608,67 +653,34 @@
         
         <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2019/06/13/反思/">
+                <a href="/2019/06/18/zookeeper/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="反思">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="zookeeper">
                         
-                        <span class="card-title">反思</span>
+                        <span class="card-title">zookeeper</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            会的永远会，不会的永远不会！
+                            Day1:手写zk配置中心
+入门
+zk分布式经典应用场景-配置中心
+手写配置中心
+zk特性揭秘
 
-记录、输出、结构、总结、，可追溯、重复。
-
-思维决定行为、行为决定过程、过程决定结果。
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-13
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fa fa-user fa-fw"></i>
-                            keyj
-                            
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="card">
-                <a href="/2019/06/12/hello-world/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
-                        
-                        <span class="card-title">Hello World</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+一、简介简介：zookeeper提供了一种集中式信息存储服务，可以看做是一个数据库。
+特点：数据存储在内存中，类似文件系统的树形结构(文件和目
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-12
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
                             </span>
                         <span class="publish-author">
                             
@@ -679,6 +691,70 @@
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/zookeeper/" target="_blank">
+                        <span class="chip bg-color">zookeeper</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/06/18/内存屏障和CPU缓存/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="内存屏障和CPU缓存">
+                        
+                        <span class="card-title">内存屏障和CPU缓存</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            CPU性能优化手段-缓存一、CPU性能优化-缓存为了提高程序运行的性能，现代CPU在很多方面对程序进行了优化。
+例如：CPU高速缓存。尽可能地避免处理器访问主内存的时间开销，处理器大多会利用缓存cache提高性能。
+
+1、多级缓存L1 Ca
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            keyj
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/高性能编程/" target="_blank">
+                        <span class="chip bg-color">高性能编程</span>
+                    </a>
+                    
+                    <a href="/tags/多线程并发编程/" target="_blank">
+                        <span class="chip bg-color">多线程并发编程</span>
+                    </a>
+                    
+                    <a href="/tags/java基础/" target="_blank">
+                        <span class="chip bg-color">java基础</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

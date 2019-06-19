@@ -4,8 +4,9 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, seven">
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex">
+    <meta name="keywords" content="kafka, seven">
+    <meta name="description" content="简介一、简介linkedin公司出品，使用scala（spark也是基于此语言）编写，具有高水平扩展和高吞吐量的分布式消息系统。
+kafka对消息保存根据topic进行分类，集群中实例称之为broker。发送消息者为producer，消息接">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Hello World | seven</title>
+    <title>kafka | seven</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -257,13 +258,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Hello World
+                        kafka
                     </div>
                 </div>
             </div>
@@ -372,9 +373,21 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/中间件/" target="_blank">
+                                <span class="chip bg-color">中间件</span>
+                            </a>
+                        
+                            <a href="/tags/消息队列/" target="_blank">
+                                <span class="chip bg-color">消息队列</span>
+                            </a>
+                        
+                            <a href="/tags/kafka/" target="_blank">
+                                <span class="chip bg-color">kafka</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -385,7 +398,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-12
+                    2019-06-17
                 </div>
 
                 
@@ -401,15 +414,148 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><p>linkedin公司出品，使用scala（spark也是基于此语言）编写，具有高水平扩展和高吞吐量的分布式消息系统。</p>
+<p>kafka对消息保存根据topic进行分类，集群中实例称之为broker。发送消息者为producer，消息接受者为consumer。</p>
+<p>kafka集群、生产者、消费者均需要依赖zookeeper。</p>
+<h3 id="1、主流MQ对比"><a href="#1、主流MQ对比" class="headerlink" title="1、主流MQ对比"></a>1、主流MQ对比</h3><p> 吞吐量 ： kafka&gt;rabbitmq&gt;activemq</p>
+<p> 数据准确性：rabbitmq&gt;activemq&gt;kafka</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">ActiveMQ</th>
+<th align="center">RabbitMQ</th>
+<th>Kafka</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">所属社区/公司</td>
+<td align="center">Apache</td>
+<td align="center">Mozilla public license</td>
+<td>apache/Linkedin</td>
+</tr>
+<tr>
+<td align="center">开发语言</td>
+<td align="center">java</td>
+<td align="center">erlang</td>
+<td>scala</td>
+</tr>
+<tr>
+<td align="center">支持的协议</td>
+<td align="center">OpenWire、STOMP、REST、XMPP、AMQP</td>
+<td align="center">AMQP</td>
+<td>仿AMQP</td>
+</tr>
+<tr>
+<td align="center">事务</td>
+<td align="center">支持</td>
+<td align="center">不支持</td>
+<td>0.11开始支持</td>
+</tr>
+<tr>
+<td align="center">集群</td>
+<td align="center">支持(不擅长)</td>
+<td align="center">支持(不擅长)</td>
+<td>支持</td>
+</tr>
+<tr>
+<td align="center">负载均衡</td>
+<td align="center">支持</td>
+<td align="center">支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td align="center">动态扩容</td>
+<td align="center">不支持</td>
+<td align="center">不支持</td>
+<td>支持(zk)</td>
+</tr>
+</tbody></table>
+<h3 id="2、kafka主要特性"><a href="#2、kafka主要特性" class="headerlink" title="2、kafka主要特性"></a>2、kafka主要特性</h3><p>kafka是一个流处理平台：</p>
+<ul>
+<li>可发布和订阅流数据</li>
+<li>以容错的方式<a href>存储</a>流数据（rabbitmq、activemq不堆积数据，消费完即删。kafka堆积数据，存储数据-使用磁盘顺序存储）</li>
+<li>可以在流数据产生时就进行处理（kafka内streams api）</li>
+</ul>
+<p>kafka适合场景：</p>
+<ul>
+<li>构造实时流数据管道，系统之间可靠获取数据</li>
+<li>构建实时流式应用程序，处理流数据或基于数据做出反应</li>
+</ul>
+<h2 id="二、相关概念"><a href="#二、相关概念" class="headerlink" title="二、相关概念"></a>二、相关概念</h2><h3 id="1、AMQP协议"><a href="#1、AMQP协议" class="headerlink" title="1、AMQP协议"></a>1、<strong>AMQP协议</strong></h3><p>  AMQP: Advanced Message Queuing Protocol,是一个提供统一消息服务的标准高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件而设计。</p>
+<p>模型如下：</p>
+<pre><code>   **producer** -----*push*-------&gt;**broker**-------pull-**------&gt;**consumer**  </code></pre><p><strong>Topic:</strong>数据主题，是kafka中用来代表一个数据流的一个抽象。发布数据时，可用topic对数据进行分类，也作为订阅数据时的主题。可同时有多个producer、consumer。</p>
+<p><strong>Partition:</strong>每个partition是一个顺序的、不可变的record序列，partition中的record会被分配一个自增长的id，我们称之为offset。</p>
+<p><em>kafka顺序消息要求：</em></p>
+<p>1、topic使用一个partition</p>
+<p>2、topic多个partition，一类消息使用同一个key即可路由到同一个partition</p>
+<p><strong>Record:</strong>每条记录都有key、value、timestamp三个消息。</p>
+<p><strong><em>扩展：大数据分片思维</em></strong></p>
+<p>海量数据分片存储在多台服务器中，分片描述、管理需要第三者维护。</p>
+<p>统一存储：</p>
+<p>提高并发级别：</p>
+<p>降低数据丢失的风险：副本解决单点出问题</p>
+<p><strong>replication</strong>: 副本</p>
+<p>每个partition还会被复制到其他服务器作为replication，这是一种冗余备份策略。</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/18/guEiHF.png" alt="guEiHF.png"></p>
+<ul>
+<li>同一个partition的多个replication不允许出现在同一个broker中</li>
+<li>每个partition的replication中，有一个leader、零或多个follower</li>
+<li>leader处理此分区<strong>所有的</strong>读写请求，follower仅仅被动的复制数据</li>
+<li>leader宕机后，会从follower中选举出新的leader</li>
+</ul>
+<h3 id="2、kafka核心Api"><a href="#2、kafka核心Api" class="headerlink" title="2、kafka核心Api"></a>2、kafka核心Api</h3><h4 id="1、四个核心API"><a href="#1、四个核心API" class="headerlink" title="1、四个核心API"></a>1、四个核心API</h4><ul>
+<li><p><strong>Producer API</strong></p>
+<p>允许一个应用程序发布一串流式的数据到一个或者多个Kafka topic。</p>
+</li>
+<li><p><strong>Consumer API</strong></p>
+<p>允许一个应用程序订阅一个或者多个topic，并且对发布给他们的流式数据进行处理。</p>
+</li>
+<li><p><strong>Streams API</strong></p>
+<p>允许一个应用程序作为一个流处理器，消费一个或者多个topic产生的输入流，然后生产一个输出流到一个或者多个topic中去，在输入输出流中进行有效的转换。</p>
+</li>
+<li><p><strong>Connector API</strong></p>
+<p>允许构建并运行可重用的生产者或者消费者，将kafka topics连接到已存在的应用程序或者数据系统。比如，连接到一个关系数据库，捕捉表的所有变更内容。</p>
+<p>在kafka中，客户端和服务器之间的通信是通过简单、高性能、语言无关的TCP协议完成的。</p>
+</li>
+</ul>
+<p><img src="https://t1.picb.cc/uploads/2019/06/18/guE5ri.png" alt="guE5ri.png"></p>
+<h4 id="2、Kafka-API-producer"><a href="#2、Kafka-API-producer" class="headerlink" title="2、Kafka API-producer"></a>2、Kafka API-producer</h4><p><img src="https://t1.picb.cc/uploads/2019/06/18/guKHns.png" alt="guKHns.png"></p>
+<ul>
+<li>Producer 会为每个partition维护一个缓冲，用来记录还没有发送的数据，每个缓冲区大小用batch.size指定，默认值为16k</li>
+<li>linger.ms，buffer中的数据还没有达到batch.size前，需要等待的时间</li>
+<li>acks用来配置请求成功的标准  0、1、all</li>
+</ul>
+<h4 id="3、Kafka-API-consumer"><a href="#3、Kafka-API-consumer" class="headerlink" title="3、Kafka API-consumer"></a>3、Kafka API-consumer</h4><ul>
+<li><p>Kafka Simple Consumer</p>
+<p>Simple Consumer 位于kafka.javaapi.consumer包中，不提供负载均衡、容错特性，每次获取数据都要指定topic、partition、offset、fetchsize</p>
+</li>
+<li><p>High-level Consumer</p>
+<p>该客户端透明地处理kafka broker异常，透明地切换consumer的partition，通过和broker交互来实现consumer group级别的<strong>负载均衡</strong></p>
+<p>consumer group是动态维护的，同一个group中的consumer的group id相同</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/18/guKFbW.png" alt="guKFbW.png"></p>
+</li>
+</ul>
+<h2 id="三、kafka使用场景"><a href="#三、kafka使用场景" class="headerlink" title="三、kafka使用场景"></a>三、kafka使用场景</h2><h3 id="1、消息系统"><a href="#1、消息系统" class="headerlink" title="1、消息系统"></a>1、消息系统</h3><h3 id="2、存储系统"><a href="#2、存储系统" class="headerlink" title="2、存储系统"></a>2、存储系统</h3><h3 id="3、日志聚合"><a href="#3、日志聚合" class="headerlink" title="3、日志聚合"></a>3、日志聚合</h3><pre><code>ELK=elasticSearch+logstash+kibana</code></pre><h3 id="4、跟踪网站活动"><a href="#4、跟踪网站活动" class="headerlink" title="4、跟踪网站活动"></a>4、跟踪网站活动</h3><h3 id="5、流处理"><a href="#5、流处理" class="headerlink" title="5、流处理"></a>5、流处理</h3><h2 id="kafka优雅应用"><a href="#kafka优雅应用" class="headerlink" title="kafka优雅应用"></a>kafka优雅应用</h2><h3 id="1-监控工具"><a href="#1-监控工具" class="headerlink" title="1.监控工具"></a>1.监控工具</h3><h3 id="Kafka-Streams-Api"><a href="#Kafka-Streams-Api" class="headerlink" title="Kafka Streams Api"></a>Kafka Streams Api</h3><p><strong>遗留问题解答</strong>：offset提交方式：automatic commit、手动提交、本地维护</p>
+<p>broker维护的offset是为broker挂了以后重启用的。若不出问题，消费者以自己本地缓存的数据为准。</p>
+<p>lambda： 批处理需求， 延时批量处理加流低延迟处理两套，互补；开发与运维成本高</p>
+<p>业界流式处理storm。目前流行架构，kafka配合spark或者flink使用。即能批处理又能流式处理，</p>
+<p>批处理、流式都是同一套架构开发，解决上面lambda架构问题。</p>
+<p>kafka流程序：topic读出数据、处理后、写到新的topic中。</p>
+<p><strong>官网stream例子。</strong></p>
+<p>数据聚合、清洗轻量级平台</p>
+<h4 id="producer分发消息到那个partition中："><a href="#producer分发消息到那个partition中：" class="headerlink" title="producer分发消息到那个partition中："></a>producer分发消息到那个partition中：</h4><p>producer连上一个broker，元数据列表，有partition的leader分布，</p>
+<p>消息key为空时，对partition总数取模；key不为null，对key进行hash后取模。</p>
+<p>kafka中key，通过相同key，放在同一个partition中，就不能动态添加partition。</p>
+<h4 id="kafka持久化使用磁盘"><a href="#kafka持久化使用磁盘" class="headerlink" title="kafka持久化使用磁盘"></a>kafka持久化使用磁盘</h4><p>顺序写+pagecache</p>
+<p>磁盘顺序写、raid5磁盘加速</p>
+<p>使用pagecache，系统层面缓存。</p>
+<h3 id="push和pull的区别："><a href="#push和pull的区别：" class="headerlink" title="push和pull的区别："></a>push和pull的区别：</h3><p>实时性：push的实时性更好；pull拉取，实时性依赖client的配置和行为</p>
+<p>连接方式：push一般长连接，pull短连接</p>
+<p>难点：</p>
+<pre><code>   push,峰值出现在客户端；
+
+   pull拉取，实时性和服务端心跳压力的取舍。kafka的long-polling解决此难点，服务端阻塞客户端请求，服务端存在压力，可配置服务端有多少数据即返回、超时时间</code></pre><p>​            </p>
 
             </div>
             <hr>
@@ -565,9 +711,9 @@
             </div>
             <br>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
-                    《Hello World》
+                    《kafka》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/12/hello-world/" property="cc:attributionName" rel="cc:attributionURL">
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/17/kafka/" property="cc:attributionName" rel="cc:attributionURL">
                 keyj
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
@@ -610,28 +756,28 @@
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/06/13/反思/">
+                <a href="/2019/06/18/线程中止/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="反思">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="线程中止">
                         
-                        <span class="card-title">反思</span>
+                        <span class="card-title">线程中止</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            会的永远会，不会的永远不会！
-
-记录、输出、结构、总结、，可追溯、重复。
-
-思维决定行为、行为决定过程、过程决定结果。
+                            线程终止不正确的线程终止-stopstop：终止线程，并且清除监视器锁的信息，但是可能导致线程安全问题
+destroy：jdk未实现该方法
+stop无法响应中断，使用interrupt方法
+错误代码示例：
+正确的线程终止-interrupt
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-13
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
                         </span>
                         <span class="publish-author">
                             
@@ -642,33 +788,55 @@
                     </div>
                 </div>
                 
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/高性能编程/" target="_blank">
+                        <span class="chip bg-color">高性能编程</span>
+                    </a>
+                    
+                    <a href="/tags/多线程并发编程/" target="_blank">
+                        <span class="chip bg-color">多线程并发编程</span>
+                    </a>
+                    
+                    <a href="/tags/java基础/" target="_blank">
+                        <span class="chip bg-color">java基础</span>
+                    </a>
+                    
+                </div>
+                
             </div>
         </div>
         
         
         <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/06/12/hello-world/">
+                <a href="/2019/06/17/线程状态/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="线程状态">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">线程状态</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                            线程状态一、六种线程状态6个状态定义，在java.lang.Thread.State中
+
+NEW： 尚未启动的线程的线程状态
+
+Runnable：可运行线程的线程状态，等待CPU的调度
+
+Blocked：线程阻塞等待监视器锁定的线程状态，处
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-12
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-17
                             </span>
                         <span class="publish-author">
                             
@@ -678,7 +846,18 @@
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/线程状态/" target="_blank">
+                        <span class="chip bg-color">线程状态</span>
+                    </a>
+                    
+                    <a href="/tags/多线程/" target="_blank">
+                        <span class="chip bg-color">多线程</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

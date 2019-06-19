@@ -4,8 +4,11 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, seven">
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex">
+    <meta name="keywords" content="内存屏障和CPU缓存, seven">
+    <meta name="description" content="CPU性能优化手段-缓存一、CPU性能优化-缓存为了提高程序运行的性能，现代CPU在很多方面对程序进行了优化。
+例如：CPU高速缓存。尽可能地避免处理器访问主内存的时间开销，处理器大多会利用缓存cache提高性能。
+
+1、多级缓存L1 Ca">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Hello World | seven</title>
+    <title>内存屏障和CPU缓存 | seven</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -257,13 +260,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Hello World
+                        内存屏障和CPU缓存
                     </div>
                 </div>
             </div>
@@ -372,9 +375,21 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/高性能编程/" target="_blank">
+                                <span class="chip bg-color">高性能编程</span>
+                            </a>
+                        
+                            <a href="/tags/多线程并发编程/" target="_blank">
+                                <span class="chip bg-color">多线程并发编程</span>
+                            </a>
+                        
+                            <a href="/tags/java基础/" target="_blank">
+                                <span class="chip bg-color">java基础</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -385,7 +400,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-12
+                    2019-06-18
                 </div>
 
                 
@@ -401,15 +416,41 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <h3 id="CPU性能优化手段-缓存"><a href="#CPU性能优化手段-缓存" class="headerlink" title="CPU性能优化手段-缓存"></a>CPU性能优化手段-缓存</h3><h3 id="一、CPU性能优化-缓存"><a href="#一、CPU性能优化-缓存" class="headerlink" title="一、CPU性能优化-缓存"></a>一、CPU性能优化-缓存</h3><p>为了提高程序运行的性能，现代CPU在很多方面对程序进行了优化。</p>
+<p>例如：CPU高速缓存。尽可能地避免处理器访问主内存的时间开销，处理器大多会利用缓存cache提高性能。</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/18/guTlLi.png" alt="guTlLi.png"></p>
+<h4 id="1、多级缓存"><a href="#1、多级缓存" class="headerlink" title="1、多级缓存"></a>1、多级缓存</h4><p>L1 Cache(一级缓存)是CPU第一层高速缓存，分为数据缓存和指令缓存。一般服务器CPU的L1缓存的容量通常在32—4096KB。</p>
+<p>L2 由于L1高速缓存存在容量的限制，为了再次提高CPU的运算速度，在CPU外部放置一高速存储器，即二级缓存。</p>
+<p>L3 现在都是内置的。而它的实际作用即是，L3缓存的应用可以进一步降低内存延迟，同时提升大数据量计算时处理器的性能。具有较大L3缓存的处理器提供更有效的文件系统缓存行为及较短消息和处理器队列长度。<strong>一般是多核共享一个L3缓存。</strong></p>
+<p><strong>cpu读取数据时，先从L1中寻找，再从L2中寻找，再从L3中寻找，然后是内存，再后是外部存储器</strong></p>
+<h4 id="2、缓存同步协议"><a href="#2、缓存同步协议" class="headerlink" title="2、缓存同步协议"></a>2、缓存同步协议</h4><p> 多CPU读取同样的数据进行缓存，进行不同运算之后，最终写入主内存以哪个CPU为准？</p>
+<p>在这种高速缓存回写的场景下，有一个<strong>缓存一致性协议</strong>多数CPU厂商对它进行了实现。</p>
+<p>MESI协议，它规定每条缓存有个状态位，同时定义了下面四个状态：</p>
+<p>修改态（modified）-此cache行已被修改过（脏行），内容已不同于主存，为此cache专有。</p>
+<p>专有态（exclusive）-此cache行内容同于主存，但不出现在其它cache中；</p>
+<p>共享态（shared）-此cache行内容同于主存，但也出现在其它cache中;</p>
+<p>无效态（invalid）-此cache行内容无效(空行)。</p>
+<p><em>多处理器时，单个CPU对缓存中数据进行了改动，需要通知给其他的CPU。</em></p>
+<p><em>也就是意味着，CPU处理要控制自己的读写操作，还要监听其他CPU发出的通知，从而保证最终一致。</em></p>
+<h3 id="二、CPU性能优化-运行时指令重排"><a href="#二、CPU性能优化-运行时指令重排" class="headerlink" title="二、CPU性能优化-运行时指令重排"></a>二、CPU性能优化-运行时指令重排</h3><p><img src="https://t1.picb.cc/uploads/2019/06/18/gusIgL.png" alt="gusIgL.png"></p>
+<p> <strong><em>指令重排的场景：</em></strong>当CPU<strong>写缓存</strong>时发现缓存区块正在被其他CPU占用，为了提高CPU处理性能，可能将后面的<strong>读缓存命令优先执行</strong>。</p>
+<p>该重排并非随便重排，需要遵循<strong>as-if-serial语义</strong></p>
+<p><strong>as-if-serial语义</strong>：不管怎么重排序（编译器和处理器为了提高并行度），<strong>单线程</strong>程序的执行结果不能被改变。编译器，runtime和处理器都必须遵守as-if-serial语义。</p>
+<p>也就是说：编译器和处理器<strong><em>不会对存在数据依赖关系的操作做重排序。</em></strong></p>
+<h3 id="三、两个问题"><a href="#三、两个问题" class="headerlink" title="三、两个问题"></a>三、两个问题</h3><ol>
+<li><p>CPU高速缓存存在的问题：</p>
+<p>缓存中的数据与主内存的数据并不是实时同步的，各CPU间缓存的数据也不是实时同步。<strong>在同一个时间点，各CPU所看到同一内存地址的数据的值可能是不一致的。</strong></p>
+</li>
+<li><p>CPU执行指令重排序存在的问题：</p>
+<p>虽然遵守了as-if-serial语义，单仅在单个cpu自己执行的情况下能保证结果正确。</p>
+<p>多核多线程中，指令逻辑无法分辨因果关联，可能出现<strong>乱序执行</strong>，导致程序运行结果错误。</p>
+</li>
+</ol>
+<h3 id="四、内存屏障"><a href="#四、内存屏障" class="headerlink" title="四、内存屏障"></a>四、内存屏障</h3><p> 处理器提供了两个内存屏障指令Memory Barrier用于解决上述的两个问题：</p>
+<p><strong>写内存屏障</strong>Store Memory Barrier：在指令后插入Store Barrier，能让写入缓存中的最新数据更新写入主内存，让其他线程可见。</p>
+<p><strong>读内存屏障：Load Memory Barrier</strong>:在指令前插入Load Barrier ,可以让高速缓存中的数据失效，强制重新从主内存加载数据。</p>
+<p>强制读取主内存内容，让cpu缓存与主内存保持一致，避免了缓存导致的一致性问题。</p>
+<p><strong>上述优化手段会导致JVM线程安全问题。</strong></p>
 
             </div>
             <hr>
@@ -565,9 +606,9 @@
             </div>
             <br>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
-                    《Hello World》
+                    《内存屏障和CPU缓存》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/12/hello-world/" property="cc:attributionName" rel="cc:attributionURL">
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/18/内存屏障和CPU缓存/" property="cc:attributionName" rel="cc:attributionURL">
                 keyj
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
@@ -610,28 +651,31 @@
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/06/13/反思/">
+                <a href="/2019/06/18/zookeeper/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="反思">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="zookeeper">
                         
-                        <span class="card-title">反思</span>
+                        <span class="card-title">zookeeper</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            会的永远会，不会的永远不会！
+                            Day1:手写zk配置中心
+入门
+zk分布式经典应用场景-配置中心
+手写配置中心
+zk特性揭秘
 
-记录、输出、结构、总结、，可追溯、重复。
-
-思维决定行为、行为决定过程、过程决定结果。
+一、简介简介：zookeeper提供了一种集中式信息存储服务，可以看做是一个数据库。
+特点：数据存储在内存中，类似文件系统的树形结构(文件和目
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-13
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
                         </span>
                         <span class="publish-author">
                             
@@ -642,33 +686,41 @@
                     </div>
                 </div>
                 
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/zookeeper/" target="_blank">
+                        <span class="chip bg-color">zookeeper</span>
+                    </a>
+                    
+                </div>
+                
             </div>
         </div>
         
         
         <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/06/12/hello-world/">
+                <a href="/2019/06/18/线程池应用及实现原理/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="线程池应用及实现原理">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">线程池应用及实现原理</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                            
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-12
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
                             </span>
                         <span class="publish-author">
                             
@@ -678,7 +730,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>

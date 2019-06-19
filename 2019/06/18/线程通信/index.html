@@ -4,8 +4,18 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, seven">
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex">
+    <meta name="keywords" content="线程通信, seven">
+    <meta name="description" content="一、通信方式要想实现多个线程之间的协同，如：线程执行先后顺序、获取某个线程执行的结果等等。
+涉及到线程之间相互通信，分为下面四类：
+
+文件共享
+
+网络共享
+
+共享变量
+
+jdk提供的线程协调API
+细分为：suspend/resume、wa">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +23,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Hello World | seven</title>
+    <title>线程通信 | seven</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -257,13 +267,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Hello World
+                        线程通信
                     </div>
                 </div>
             </div>
@@ -372,9 +382,21 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/高性能编程/" target="_blank">
+                                <span class="chip bg-color">高性能编程</span>
+                            </a>
+                        
+                            <a href="/tags/多线程并发编程/" target="_blank">
+                                <span class="chip bg-color">多线程并发编程</span>
+                            </a>
+                        
+                            <a href="/tags/java基础/" target="_blank">
+                                <span class="chip bg-color">java基础</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -385,7 +407,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-12
+                    2019-06-18
                 </div>
 
                 
@@ -401,15 +423,70 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <h3 id="一、通信方式"><a href="#一、通信方式" class="headerlink" title="一、通信方式"></a>一、通信方式</h3><p>要想实现多个线程之间的协同，如：线程执行先后顺序、获取某个线程执行的结果等等。</p>
+<p>涉及到线程之间相互通信，分为下面四类：</p>
+<ol>
+<li><p>文件共享</p>
+</li>
+<li><p>网络共享</p>
+</li>
+<li><p>共享变量</p>
+</li>
+<li><p>jdk提供的线程协调API</p>
+<p>细分为：suspend/resume、wait/notify、park/unpark</p>
+</li>
+</ol>
+<h3 id="二、线程协作-JDK-API"><a href="#二、线程协作-JDK-API" class="headerlink" title="二、线程协作-JDK API"></a>二、线程协作-JDK API</h3><p>JDK中对于需要多线程协作完成某一项任务的场景，提供了对应API支持。</p>
+<p>多线程协作的典型场景是：生产者-消费者模型(线程阻塞、线程唤醒)</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/18/gusbSJ.png" alt="gusbSJ.png"></p>
+<ol>
+<li><h4 id="API-被弃用的suspend和resume"><a href="#API-被弃用的suspend和resume" class="headerlink" title="API-被弃用的suspend和resume"></a>API-被弃用的<del>suspend和resume</del></h4><p>作用：调用suspend挂起目标线程，通过resume可以恢复线程执行。</p>
+<p>存在问题：</p>
+<p>1、同步代码中，suspend 挂起后不会释放锁</p>
+<p>2、必须执行suspend，后执行resume，否则会导致无法唤醒，死锁</p>
+</li>
+<li><h4 id="wait-notify机制"><a href="#wait-notify机制" class="headerlink" title="wait/notify机制"></a>wait/notify机制</h4><p>这些方法只能由同一对象锁的持有者线程调用，也就是写在同步块里面，否则会抛出illegalMonitorStateException异常。</p>
+<p><strong>wait</strong>方法导致当前线程等待，加入该对象的等待集合中，并且放弃当前持有的对象锁。</p>
+<p><strong>notify/notifyAll</strong>方法唤醒一个或所有正在等待这个对象锁的线程。</p>
+<p><em>注意：</em>虽然<strong>wait会自动解锁</strong>，但是对<strong>顺序有要求</strong>，如果在notify被调用之后，才开始wait方法的调用，线程会永远处于waiting状态。</p>
+</li>
+<li><h4 id="park-unpark机制"><a href="#park-unpark机制" class="headerlink" title="park/unpark机制"></a>park/unpark机制</h4><p>线程调用park则等待“许可”，unpark方法为指定线程提供“许可”。</p>
+<p>不要求park/unpark方法的调用顺序。</p>
+<p>多次调用unpark之后，再调用park，线程会直接运行。但是不会叠加，也就是说，连续多次调用park方法，第一次会拿到“许可”直接运行，后续调用会进入等待。</p>
+</li>
+<li><h4 id="三种方式比较区别"><a href="#三种方式比较区别" class="headerlink" title="三种方式比较区别"></a>三种方式比较区别</h4></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><del>suspend/resume</del></th>
+<th align="center">wait/notify</th>
+<th align="center">park/unpark</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>位置</td>
+<td>Thread</td>
+<td align="center">Object</td>
+<td align="center">juc.lock.LockSupport</td>
+</tr>
+<tr>
+<td>特点</td>
+<td>已被弃用，suspend不会释放持有的锁，且suspend和resume有调用顺序要求，极易写出死锁代码</td>
+<td align="center">1、只能在同步方法、同步代码块中使用                            2、wait会释放锁                                                                            3、wait和notify调用顺序有要求</td>
+<td align="center">1、“令牌”机制，无顺序要求，但park不会自动释放锁 2、unpark调用无叠加效果，多次unpark，park只能使用一次</td>
+</tr>
+<tr>
+<td>注意</td>
+<td></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h3 id="三、伪唤醒"><a href="#三、伪唤醒" class="headerlink" title="三、伪唤醒"></a>三、伪唤醒</h3><p>代码中通过if语句来判断，是否进入等待状态，是错误的！</p>
+<p>官方建议<strong>应该在循环中检查等待条件</strong>，原因是处于等待状态的线程可能会收到错误警报和伪唤醒，如果不在循环中检查等待条件，程序就会在没有满足结束条件的情况下退出。</p>
+<p><strong>伪唤醒</strong>是指线程并非因为notify、notifyall、unpark等api调用而唤醒，而是由于更底层原因导致的。</p>
 
             </div>
             <hr>
@@ -565,9 +642,9 @@
             </div>
             <br>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
-                    《Hello World》
+                    《线程通信》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/12/hello-world/" property="cc:attributionName" rel="cc:attributionURL">
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/18/线程通信/" property="cc:attributionName" rel="cc:attributionURL">
                 keyj
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
@@ -610,28 +687,24 @@
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/06/13/反思/">
+                <a href="/2019/06/18/线程封闭之Threadlocal和栈封闭/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="反思">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="线程封闭之Threadlocal和栈封闭">
                         
-                        <span class="card-title">反思</span>
+                        <span class="card-title">线程封闭之Threadlocal和栈封闭</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            会的永远会，不会的永远不会！
-
-记录、输出、结构、总结、，可追溯、重复。
-
-思维决定行为、行为决定过程、过程决定结果。
+                            
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-13
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
                         </span>
                         <span class="publish-author">
                             
@@ -648,27 +721,31 @@
         
         <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/06/12/hello-world/">
+                <a href="/2019/06/18/线程中止/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="线程中止">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">线程中止</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                            线程终止不正确的线程终止-stopstop：终止线程，并且清除监视器锁的信息，但是可能导致线程安全问题
+destroy：jdk未实现该方法
+stop无法响应中断，使用interrupt方法
+错误代码示例：
+正确的线程终止-interrupt
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-12
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
                             </span>
                         <span class="publish-author">
                             
@@ -678,7 +755,22 @@
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/高性能编程/" target="_blank">
+                        <span class="chip bg-color">高性能编程</span>
+                    </a>
+                    
+                    <a href="/tags/多线程并发编程/" target="_blank">
+                        <span class="chip bg-color">多线程并发编程</span>
+                    </a>
+                    
+                    <a href="/tags/java基础/" target="_blank">
+                        <span class="chip bg-color">java基础</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

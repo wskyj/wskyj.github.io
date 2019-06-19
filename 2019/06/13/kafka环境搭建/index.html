@@ -4,8 +4,13 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, seven">
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex">
+    <meta name="keywords" content="kafka环境搭建, seven">
+    <meta name="description" content="基础环境搭建
+安装jdk
+安装ssh多个linux服务器之间可以通过ssh命令免密钥登陆，可以通过在脚本中操作集群中相关所有服务器。
+1、安装ssh服务，搭建的虚拟服务器中已存在。
+2、生成密钥对
+​            ssh-keyg">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Hello World | seven</title>
+    <title>kafka环境搭建 | seven</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -257,13 +262,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Hello World
+                        kafka环境搭建
                     </div>
                 </div>
             </div>
@@ -372,9 +377,17 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/消息队列/" target="_blank">
+                                <span class="chip bg-color">消息队列</span>
+                            </a>
+                        
+                            <a href="/tags/kafa/" target="_blank">
+                                <span class="chip bg-color">kafa</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -385,7 +398,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-12
+                    2019-06-13
                 </div>
 
                 
@@ -401,15 +414,45 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">$ hexo new &quot;My New Post&quot;</code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">$ hexo server</code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">$ hexo generate</code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">$ hexo deploy</code></pre>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <h2 id="基础环境搭建"><a href="#基础环境搭建" class="headerlink" title="基础环境搭建"></a>基础环境搭建</h2><ol>
+<li><h3 id="安装jdk"><a href="#安装jdk" class="headerlink" title="安装jdk"></a>安装jdk</h3></li>
+<li><h3 id="安装ssh"><a href="#安装ssh" class="headerlink" title="安装ssh"></a>安装ssh</h3><p>多个linux服务器之间可以通过ssh命令免密钥登陆，可以通过在脚本中操作集群中相关所有服务器。</p>
+<p>1、安装ssh服务，搭建的虚拟服务器中已存在。</p>
+<p>2、生成密钥对</p>
+<p>​            <code>ssh-keygen -t rsa</code></p>
+<p>在root用户下会有.ssh文件夹包含id_rsa私钥文件、id_rsa.pub公钥文件</p>
+<p>3、将公钥文件追加到同一个文件中，放在密钥相同目录下面</p>
+<p><code>cat id_rsa.pub &gt;&gt; authorized_keys</code></p>
+<p>4、scp命令可以在多个服务器之间复制文件</p>
+<p>scp 目标文件 目标主机(IP:目标目录)</p>
+<p><code>scp authorized_keys node2:/root/.ssh/</code></p>
+<p>5、通过ssh hostname在主机之间验证是否可以登陆，首次登陆需要密码</p>
+</li>
+<li><h3 id="安装zookeeper"><a href="#安装zookeeper" class="headerlink" title="安装zookeeper"></a>安装zookeeper</h3><ol>
+<li><p>单机</p>
+<ol>
+<li><p>下载:<a href="https://zookeeper.apache.org/doc/r3.5.5/" target="_blank" rel="noopener">https://zookeeper.apache.org/doc/r3.5.5/</a> </p>
+<p>复制一份 conf下配置文件，去除后缀zoo.cfg</p>
+<p>​    ./zkServer.sh start 启动</p>
+<p>./zkServer.sh stop 停止</p>
+<p>./zkServer.sh restart 重启</p>
+<p>./zkServer.sh status 查看状态</p>
+</li>
+<li><p>客户端连接</p>
+<p>./zkCli.sh -server localhost:2181</p>
+</li>
+</ol>
+</li>
+<li><p>集群</p>
+</li>
+</ol>
+</li>
+<li><h3 id="安装kafka"><a href="#安装kafka" class="headerlink" title="安装kafka"></a>安装kafka</h3></li>
+<li><h3 id="常用linux命令"><a href="#常用linux命令" class="headerlink" title="常用linux命令"></a>常用linux命令</h3><p>vi中复制一行，先在目标行yy，然后在空行中p即可，注意在命令行条件下切换</p>
+<p>vi删除一行在命令行下为dd</p>
+<p>cp -r  强制复制文件夹</p>
+</li>
+</ol>
 
             </div>
             <hr>
@@ -565,9 +608,9 @@
             </div>
             <br>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
-                    《Hello World》
+                    《kafka环境搭建》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/12/hello-world/" property="cc:attributionName" rel="cc:attributionURL">
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/13/kafka环境搭建/" property="cc:attributionName" rel="cc:attributionURL">
                 keyj
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
@@ -610,6 +653,54 @@
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
+                <a href="/2019/06/13/linux常用命令/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="linux常用命令">
+                        
+                        <span class="card-title">linux常用命令</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            vi中复制一行，先在目标行yy，然后在空行中p即可，注意在命令行条件下切换
+vi删除一行在命令行下为dd
+cp -r  强制复制文件夹
+
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-13
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            keyj
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/linux/" target="_blank">
+                        <span class="chip bg-color">linux</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
                 <a href="/2019/06/13/反思/">
                     <div class="card-image">
                         
@@ -630,45 +721,8 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-13
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fa fa-user fa-fw"></i>
-                            keyj
-                            
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="fa fa-dot-circle-o"></i>
-            </div>
-            <div class="card">
-                <a href="/2019/06/12/hello-world/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
-                        
-                        <span class="card-title">Hello World</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
-                        
-                    </div>
-                    <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-12
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-13
                             </span>
                         <span class="publish-author">
                             
@@ -678,7 +732,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
