@@ -5,7 +5,9 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="线程封闭之Threadlocal和栈封闭, seven">
-    <meta name="description" content="线程封闭之Threadlocal和栈封闭 | seven">
+    <meta name="description" content="线程封闭概念多线程访问共享可变数据时，涉及到线程间数据同步问题。并不是所有时候，都要用到共享数据，所以线程封闭概念就提出来了。
+数据都 被封闭在各自的线程之中，就不需要同步，这种通过将数据封闭在线程中而避免使用同步的技术称为线程封闭。
+线程">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -372,9 +374,21 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/高性能编程/" target="_blank">
+                                <span class="chip bg-color">高性能编程</span>
+                            </a>
+                        
+                            <a href="/tags/多线程并发编程/" target="_blank">
+                                <span class="chip bg-color">多线程并发编程</span>
+                            </a>
+                        
+                            <a href="/tags/java基础/" target="_blank">
+                                <span class="chip bg-color">java基础</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -401,7 +415,17 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h3 id="线程封闭概念"><a href="#线程封闭概念" class="headerlink" title="线程封闭概念"></a>线程封闭概念</h3><p>多线程访问共享可变数据时，涉及到线程间数据同步问题。并不是所有时候，都要用到共享数据，所以线程封闭概念就提出来了。</p>
+<p>数据都 被封闭在各自的线程之中，就不需要同步，这种通过将数据封闭在线程中而避免使用同步的技术称为<strong>线程封闭。</strong></p>
+<p>线程封闭具体的体现有：ThreadLocal 、局部变量</p>
+<h4 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h4><p><strong>ThreadLocal 是java里面一种特殊的变量</strong></p>
+<p>它是一个线程级别的变量，每个线程都有一个ThreadLocal就是每个线程都拥有了自己独立的一个变量，竞争条件被彻底消除了，在并发模式下是绝对安全的变量。</p>
+<p><strong>用法:</strong>ThreadLocal<t> var=new ThreadLocal<t>();</t></t></p>
+<p>会自动在每一个线程上创建一个T的副本，副本之间彼此独立，互不影响。</p>
+<p>可以用ThreadLocal存储一些参数，以便在线程中多个方法中使用，用来替代方法传参的做法。</p>
+<h4 id="栈封闭"><a href="#栈封闭" class="headerlink" title="栈封闭"></a>栈封闭</h4><p><strong>局部变量</strong>固有属性之一就是封闭在线程中。</p>
+<p>他们位于执行线程的栈中，其它线程无法访问这个栈。</p>
+
             </div>
             <hr>
 
@@ -613,7 +637,10 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            为什么需要线程池一.为什么需要线程池线程是不是越多越好？
+
+线程在java中是一个对象，更是操作系统的资源，线程创建、销毁需要时间。如果创建时间+销毁时间&gt;执行时间就很不合算。
+java对象占用堆内存，操作系统线程系统内存，根据jvm
                         
                     </div>
                     <div class="publish-info">
@@ -627,6 +654,22 @@
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/高性能编程/" target="_blank">
+                        <span class="chip bg-color">高性能编程</span>
+                    </a>
+                    
+                    <a href="/tags/多线程并发编程/" target="_blank">
+                        <span class="chip bg-color">多线程并发编程</span>
+                    </a>
+                    
+                    <a href="/tags/java基础/" target="_blank">
+                        <span class="chip bg-color">java基础</span>
+                    </a>
+                    
                 </div>
                 
             </div>

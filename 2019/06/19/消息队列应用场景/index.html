@@ -4,15 +4,19 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="zookeeper, seven">
-    <meta name="description" content="Day1:手写zk配置中心
-入门
-zk分布式经典应用场景-配置中心
-手写配置中心
-zk特性揭秘
+    <meta name="keywords" content="消息队列应用场景, seven">
+    <meta name="description" content="1.MQ思路本质：中间件（独立部署）-数据存储
+MQ区别：
 
-一、简介简介：zookeeper提供了一种集中式信息存储服务，可以看做是一个数据库。
-特点：数据存储在内存中，类似文件系统的树形结构(文件和目">
+​    开发语言不同
+接收请求—&amp;gt;存储—&amp;gt;分发
+
+kafka、activemq、rabbitmq、rocketmq区别及应用场景
+
+
+特性
+ActiveMQ
+Rab">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +24,7 @@ zk特性揭秘
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>zookeeper | seven</title>
+    <title>消息队列应用场景 | seven</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -264,13 +268,13 @@ zk特性揭秘
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        zookeeper
+                        消息队列应用场景
                     </div>
                 </div>
             </div>
@@ -379,13 +383,9 @@ zk特性揭秘
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/zookeeper/" target="_blank">
-                                <span class="chip bg-color">zookeeper</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -396,7 +396,7 @@ zk特性揭秘
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-18
+                    2019-06-19
                 </div>
 
                 
@@ -412,91 +412,66 @@ zk特性揭秘
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Day1-手写zk配置中心"><a href="#Day1-手写zk配置中心" class="headerlink" title="Day1:手写zk配置中心"></a>Day1:手写zk配置中心</h2><ul>
-<li>入门</li>
-<li>zk分布式经典应用场景-配置中心</li>
-<li>手写配置中心</li>
-<li>zk特性揭秘</li>
-</ul>
-<h3 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h3><p>简介：zookeeper提供了一种集中式信息存储服务，可以看做是一个数据库。</p>
-<p>特点：数据存储在内存中，类似文件系统的树形结构(文件和目录)</p>
-<h3 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h3><h4 id="1-单机版安装："><a href="#1-单机版安装：" class="headerlink" title="1.单机版安装："></a>1.单机版安装：</h4><pre><code>    复制zoo.cfg配置文件，即可安装。</code></pre><h3 id="三-基础"><a href="#三-基础" class="headerlink" title="三.基础"></a>三.基础</h3><h4 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1.常用命令"></a>1.常用命令</h4><p>可使用help获取命令指南：</p>
+                <h3 id="1-MQ思路"><a href="#1-MQ思路" class="headerlink" title="1.MQ思路"></a>1.MQ思路</h3><p>本质：中间件（独立部署）-数据存储</p>
+<p>MQ区别：</p>
 <ul>
-<li>​        <em>ls 获取子节点</em><br>   ​        <em>create 创建节点</em></li>
-<li><em>delete 删除节点，无法删除带子节点的节点</em></li>
-<li><em>rmr 删除节点，包括子节点</em></li>
-<li><em>get 从指定节点读取数据</em></li>
-<li><em>set  将数据存入指定节点</em></li>
-<li><em>ls2 查询指定节点之下的子节点，包括节点的元数据信息</em></li>
-<li><em>sync 等待数据进行同步</em></li>
+<li>​    开发语言不同</li>
+<li>接收请求—&gt;存储—&gt;分发</li>
 </ul>
-<h4 id="2-znode-构成"><a href="#2-znode-构成" class="headerlink" title="2.znode-构成"></a>2.znode-构成</h4><ul>
-<li><em>节点数据：存储的协调数据（状态信息、配置、位置信息等）</em></li>
-<li><em>节点元数据：（stat结构）</em></li>
-<li><em>数据大小上限：1M</em> </li>
-</ul>
-<h4 id="3-stat结构"><a href="#3-stat结构" class="headerlink" title="3.stat结构"></a>3.stat结构</h4><p>节点上的元数据信息</p>
-<p>cZxid 创建该节点的zxid</p>
-<p>ctime    该节点的创建时间</p>
-<p>mZxid 该节点的最后修改zxid</p>
-<p>mtime 该节点的最后修改时间</p>
-<p>pZxid 该节点的最后子节点修改zxid</p>
-<p>cversion 该节点的子节点变更次数</p>
-<p>dataVersion 该节点数据被修改次数</p>
-<p>aclVersion 该节点的ACL变更次数</p>
-<p>ephemeralOwner 临时节点所有者会话ID，非临时节点为0</p>
-<p>dataLength 该节点数据长度</p>
-<p>numChildren 子节点数</p>
-<p><strong><em>除了ephemeralOwner、dataLength、numChild，其他属性都体现了顺序</em></strong></p>
-<h4 id="4-znode-节点类型"><a href="#4-znode-节点类型" class="headerlink" title="4.znode-节点类型"></a>4.znode-节点类型</h4><p><img src="https://t1.picb.cc/uploads/2019/06/18/gudGx6.png" alt="gudGx6.png"></p>
-<h4 id="5-临时节点-session"><a href="#5-临时节点-session" class="headerlink" title="5.临时节点-session"></a>5.临时节点-session</h4><p> <img src="https://t1.picb.cc/uploads/2019/06/18/gudpyi.png" alt="gudpyi.png"></p>
-<ul>
-<li>一个客户端连接一个会话，由zk分配唯一的会话id</li>
-<li>客户端以特定的时间间隔发送心跳以保持会话有效，ticktime</li>
-<li>超过会话超时时间未收到客户端的心跳，则判断客户端死了；默认2倍ticktime</li>
-<li>会话中的请求按fifo顺序执行</li>
-</ul>
-<h3 id="四、zk配置中心应用"><a href="#四、zk配置中心应用" class="headerlink" title="四、zk配置中心应用"></a>四、zk配置中心应用</h3><h4 id="1-配置中心"><a href="#1-配置中心" class="headerlink" title="1.配置中心"></a>1.配置中心</h4><h4 id="2-配置中心更新流程"><a href="#2-配置中心更新流程" class="headerlink" title="2.配置中心更新流程"></a>2.配置中心更新流程</h4><p><img src="https://t1.picb.cc/uploads/2019/06/18/gudFiR.png" alt="gudFiR.png"></p>
-<h4 id="3-java-Client"><a href="#3-java-Client" class="headerlink" title="3.java Client"></a>3.java Client</h4><p><img src="https://t1.picb.cc/uploads/2019/06/18/gudPq8.png" alt="gudPq8.png"></p>
-<h4 id="4-watch机制"><a href="#4-watch机制" class="headerlink" title="4.watch机制"></a>4.watch机制</h4><p>客户端可以在znodes上设置watch，监听znode的变化</p>
-<p><strong>两类watch</strong></p>
-<ul>
-<li>data watch 监听数据变更</li>
-<li>child watch 监听子节点变化</li>
-</ul>
-<p><strong>触发watch事件</strong></p>
-<ul>
-<li><p>created event：</p>
-<p>enabled with a call to exists.</p>
-</li>
-<li><p>deleted event：</p>
-<p>enabled with a call to exists,getdata and getchildren.</p>
-</li>
-<li><p>changed event：</p>
-<p>enabled with a call to exists and getdata.</p>
-</li>
-<li><p>child event：</p>
-<p>enabled with a call getchildren</p>
-</li>
-</ul>
-<h4 id="5-watch深入"><a href="#5-watch深入" class="headerlink" title="5.watch深入"></a>5.watch深入</h4><p><strong>watch重要特性</strong></p>
-<ul>
-<li>一次性触发：watch触发后即被删除。要持续监控变化，则需要持续设置watch</li>
-<li>有序性：客户端先得到watch通知，后才会看到变化结果</li>
-</ul>
-<p><strong>注意事项：</strong></p>
-<ul>
-<li>watch是一次性触发器，如果您获得了一个watch事件，并且希望得到关于未来更改的通知，则必须设置另外一个watch</li>
-<li>因为是一次性的，并且获取事件和发送watch新请求之间存在延迟，所以不能可靠地得到节点发生的每个更改</li>
-<li>一个watch对象只会被特定的通知触发一次。如果一个watch对象同时注册了exists、getdata、当节点被删除时，删除事件对exists、getdata都有效，但是只会调用watch一次。</li>
-</ul>
-<h4 id="6-zookeeper实现配置中心"><a href="#6-zookeeper实现配置中心" class="headerlink" title="6.zookeeper实现配置中心"></a>6.zookeeper实现配置中心</h4><p><strong>配置中心操作流程</strong></p>
-<p><img src="https://t1.picb.cc/uploads/2019/06/18/gudDQK.png" alt="gudDQK.png"></p>
-<p><strong>配置方式1</strong></p>
-<p><img src="https://t1.picb.cc/uploads/2019/06/18/gudEDN.png" alt="gudEDN.png"></p>
-<p><strong>配置方式2</strong></p>
-<p><img src="https://t1.picb.cc/uploads/2019/06/18/gudYne.png" alt="gudYne.png"></p>
-<h4 id="7"><a href="#7" class="headerlink" title="7."></a>7.</h4>
+<h3 id="kafka、activemq、rabbitmq、rocketmq区别及应用场景"><a href="#kafka、activemq、rabbitmq、rocketmq区别及应用场景" class="headerlink" title="kafka、activemq、rabbitmq、rocketmq区别及应用场景"></a>kafka、activemq、rabbitmq、rocketmq区别及应用场景</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>ActiveMQ</th>
+<th>RabbitMQ</th>
+<th>RocketMQ</th>
+<th>Kafka</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单机吞吐量</td>
+<td>万级，比rocketmq、kafka低一个数量级</td>
+<td>同activemq</td>
+<td>10万级，支持高吞吐</td>
+<td>10万级，高吞吐、一般配合大数据类的系统来进行实时数据计算、日志采集等场景</td>
+</tr>
+<tr>
+<td>topic数量对吞吐量的影响</td>
+<td></td>
+<td></td>
+<td>topic可以达到几百/几千的级别，吞吐量会有小幅度的下降，这是rocketMq的一大优势，在同等机器下可以支持大量的topic</td>
+<td>topic从几十到几百个时候，吞吐量会大幅度下降，同等机器下，kafka尽量保证topic数量不要过多，如果要支持大规模的topic，需要增加更多的机器资源</td>
+</tr>
+<tr>
+<td>时效性</td>
+<td>ms级</td>
+<td>微秒级，这是rabbitmq的一大特点，延迟最低</td>
+<td>ms级</td>
+<td>延迟在ms级以内</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td>高，基于主从架构实现高可用</td>
+<td>同activemq</td>
+<td>非常高，分布式架构</td>
+<td>非常高，分布式，一个数据多个副本，少数机器宕机，不会丢失数据，不会导致不可用</td>
+</tr>
+<tr>
+<td>消息可靠性</td>
+<td>有较低的概率丢失数据</td>
+<td>基本不丢</td>
+<td>经过参数优化配置，可以做到0丢失</td>
+<td>同rocketmq</td>
+</tr>
+<tr>
+<td>功能支持</td>
+<td>mq领域的功能极其完备</td>
+<td>基于erlang开发，并发能力很强，性能极好，延时很低</td>
+<td>mq功能较为完善，还是分布式，扩展性好</td>
+<td>功能较为简单，主要支持简单的mq功能，在大数据领域的实时计算以及日志采集被大规模使用</td>
+</tr>
+</tbody></table>
+
             </div>
             <hr>
 
@@ -651,9 +626,9 @@ zk特性揭秘
             </div>
             <br>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
-                    《zookeeper》
+                    《消息队列应用场景》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/18/zookeeper/" property="cc:attributionName" rel="cc:attributionURL">
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/19/消息队列应用场景/" property="cc:attributionName" rel="cc:attributionURL">
                 keyj
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
@@ -696,6 +671,47 @@ zk特性揭秘
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
+                <a href="/2019/06/21/日常问题记录/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="日常问题记录">
+                        
+                        <span class="card-title">日常问题记录</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            centos7虚拟机1.每次虚拟机环境重启后ip都会变动，极不方便。
+设置静态ip，
+参考：https://www.cnblogs.com/jadedoo/p/9967111.html
+
+
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-21
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            keyj
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
                 <a href="/2019/06/19/springCloud实践记录/">
                     <div class="card-image">
                         
@@ -715,9 +731,9 @@ java -jar discovery_ha-0.0.1-SNAPSHOT.jar –s
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-19
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-user fa-fw"></i>
@@ -735,62 +751,6 @@ java -jar discovery_ha-0.0.1-SNAPSHOT.jar –s
                     
                     <a href="/tags/分布式/" target="_blank">
                         <span class="chip bg-color">分布式</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2019/06/18/内存屏障和CPU缓存/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="内存屏障和CPU缓存">
-                        
-                        <span class="card-title">内存屏障和CPU缓存</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            CPU性能优化手段-缓存一、CPU性能优化-缓存为了提高程序运行的性能，现代CPU在很多方面对程序进行了优化。
-例如：CPU高速缓存。尽可能地避免处理器访问主内存的时间开销，处理器大多会利用缓存cache提高性能。
-
-1、多级缓存L1 Ca
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fa fa-user fa-fw"></i>
-                            keyj
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/高性能编程/" target="_blank">
-                        <span class="chip bg-color">高性能编程</span>
-                    </a>
-                    
-                    <a href="/tags/多线程并发编程/" target="_blank">
-                        <span class="chip bg-color">多线程并发编程</span>
-                    </a>
-                    
-                    <a href="/tags/java基础/" target="_blank">
-                        <span class="chip bg-color">java基础</span>
                     </a>
                     
                 </div>

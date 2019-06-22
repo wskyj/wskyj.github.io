@@ -4,15 +4,21 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="zookeeper, seven">
-    <meta name="description" content="Day1:手写zk配置中心
-入门
-zk分布式经典应用场景-配置中心
-手写配置中心
-zk特性揭秘
+    <meta name="keywords" content="RocketMQ, seven">
+    <meta name="description" content="一.RocketMQ入门1.特性
+原生分布式
+两种消息拉取
+严格消息顺序
+特有的分布式协调器
+亿级消息堆积
+组
 
-一、简介简介：zookeeper提供了一种集中式信息存储服务，可以看做是一个数据库。
-特点：数据存储在内存中，类似文件系统的树形结构(文件和目">
+2.基本概念
+producer
+消息生产者，负责产生消息，一般由业务系统负责产生消息
+
+consumer
+消息消费者，负责消费">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +26,7 @@ zk特性揭秘
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>zookeeper | seven</title>
+    <title>RocketMQ | seven</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -264,13 +270,13 @@ zk特性揭秘
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        zookeeper
+                        RocketMQ
                     </div>
                 </div>
             </div>
@@ -381,8 +387,12 @@ zk特性揭秘
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/zookeeper/" target="_blank">
-                                <span class="chip bg-color">zookeeper</span>
+                            <a href="/tags/消息队列/" target="_blank">
+                                <span class="chip bg-color">消息队列</span>
+                            </a>
+                        
+                            <a href="/tags/RocketMQ/" target="_blank">
+                                <span class="chip bg-color">RocketMQ</span>
                             </a>
                         
                     </div>
@@ -396,7 +406,7 @@ zk特性揭秘
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-18
+                    2019-06-22
                 </div>
 
                 
@@ -412,91 +422,132 @@ zk特性揭秘
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Day1-手写zk配置中心"><a href="#Day1-手写zk配置中心" class="headerlink" title="Day1:手写zk配置中心"></a>Day1:手写zk配置中心</h2><ul>
-<li>入门</li>
-<li>zk分布式经典应用场景-配置中心</li>
-<li>手写配置中心</li>
-<li>zk特性揭秘</li>
+                <h2 id="一-RocketMQ入门"><a href="#一-RocketMQ入门" class="headerlink" title="一.RocketMQ入门"></a>一.RocketMQ入门</h2><h3 id="1-特性"><a href="#1-特性" class="headerlink" title="1.特性"></a>1.特性</h3><ul>
+<li>原生分布式</li>
+<li>两种消息拉取</li>
+<li>严格消息顺序</li>
+<li>特有的分布式协调器</li>
+<li>亿级消息堆积</li>
+<li>组</li>
 </ul>
-<h3 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h3><p>简介：zookeeper提供了一种集中式信息存储服务，可以看做是一个数据库。</p>
-<p>特点：数据存储在内存中，类似文件系统的树形结构(文件和目录)</p>
-<h3 id="二、安装"><a href="#二、安装" class="headerlink" title="二、安装"></a>二、安装</h3><h4 id="1-单机版安装："><a href="#1-单机版安装：" class="headerlink" title="1.单机版安装："></a>1.单机版安装：</h4><pre><code>    复制zoo.cfg配置文件，即可安装。</code></pre><h3 id="三-基础"><a href="#三-基础" class="headerlink" title="三.基础"></a>三.基础</h3><h4 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1.常用命令"></a>1.常用命令</h4><p>可使用help获取命令指南：</p>
-<ul>
-<li>​        <em>ls 获取子节点</em><br>   ​        <em>create 创建节点</em></li>
-<li><em>delete 删除节点，无法删除带子节点的节点</em></li>
-<li><em>rmr 删除节点，包括子节点</em></li>
-<li><em>get 从指定节点读取数据</em></li>
-<li><em>set  将数据存入指定节点</em></li>
-<li><em>ls2 查询指定节点之下的子节点，包括节点的元数据信息</em></li>
-<li><em>sync 等待数据进行同步</em></li>
-</ul>
-<h4 id="2-znode-构成"><a href="#2-znode-构成" class="headerlink" title="2.znode-构成"></a>2.znode-构成</h4><ul>
-<li><em>节点数据：存储的协调数据（状态信息、配置、位置信息等）</em></li>
-<li><em>节点元数据：（stat结构）</em></li>
-<li><em>数据大小上限：1M</em> </li>
-</ul>
-<h4 id="3-stat结构"><a href="#3-stat结构" class="headerlink" title="3.stat结构"></a>3.stat结构</h4><p>节点上的元数据信息</p>
-<p>cZxid 创建该节点的zxid</p>
-<p>ctime    该节点的创建时间</p>
-<p>mZxid 该节点的最后修改zxid</p>
-<p>mtime 该节点的最后修改时间</p>
-<p>pZxid 该节点的最后子节点修改zxid</p>
-<p>cversion 该节点的子节点变更次数</p>
-<p>dataVersion 该节点数据被修改次数</p>
-<p>aclVersion 该节点的ACL变更次数</p>
-<p>ephemeralOwner 临时节点所有者会话ID，非临时节点为0</p>
-<p>dataLength 该节点数据长度</p>
-<p>numChildren 子节点数</p>
-<p><strong><em>除了ephemeralOwner、dataLength、numChild，其他属性都体现了顺序</em></strong></p>
-<h4 id="4-znode-节点类型"><a href="#4-znode-节点类型" class="headerlink" title="4.znode-节点类型"></a>4.znode-节点类型</h4><p><img src="https://t1.picb.cc/uploads/2019/06/18/gudGx6.png" alt="gudGx6.png"></p>
-<h4 id="5-临时节点-session"><a href="#5-临时节点-session" class="headerlink" title="5.临时节点-session"></a>5.临时节点-session</h4><p> <img src="https://t1.picb.cc/uploads/2019/06/18/gudpyi.png" alt="gudpyi.png"></p>
-<ul>
-<li>一个客户端连接一个会话，由zk分配唯一的会话id</li>
-<li>客户端以特定的时间间隔发送心跳以保持会话有效，ticktime</li>
-<li>超过会话超时时间未收到客户端的心跳，则判断客户端死了；默认2倍ticktime</li>
-<li>会话中的请求按fifo顺序执行</li>
-</ul>
-<h3 id="四、zk配置中心应用"><a href="#四、zk配置中心应用" class="headerlink" title="四、zk配置中心应用"></a>四、zk配置中心应用</h3><h4 id="1-配置中心"><a href="#1-配置中心" class="headerlink" title="1.配置中心"></a>1.配置中心</h4><h4 id="2-配置中心更新流程"><a href="#2-配置中心更新流程" class="headerlink" title="2.配置中心更新流程"></a>2.配置中心更新流程</h4><p><img src="https://t1.picb.cc/uploads/2019/06/18/gudFiR.png" alt="gudFiR.png"></p>
-<h4 id="3-java-Client"><a href="#3-java-Client" class="headerlink" title="3.java Client"></a>3.java Client</h4><p><img src="https://t1.picb.cc/uploads/2019/06/18/gudPq8.png" alt="gudPq8.png"></p>
-<h4 id="4-watch机制"><a href="#4-watch机制" class="headerlink" title="4.watch机制"></a>4.watch机制</h4><p>客户端可以在znodes上设置watch，监听znode的变化</p>
-<p><strong>两类watch</strong></p>
-<ul>
-<li>data watch 监听数据变更</li>
-<li>child watch 监听子节点变化</li>
-</ul>
-<p><strong>触发watch事件</strong></p>
-<ul>
-<li><p>created event：</p>
-<p>enabled with a call to exists.</p>
+<h3 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2.基本概念"></a>2.基本概念</h3><ul>
+<li><p>producer</p>
+<p>消息生产者，负责产生消息，一般由业务系统负责产生消息</p>
 </li>
-<li><p>deleted event：</p>
-<p>enabled with a call to exists,getdata and getchildren.</p>
+<li><p>consumer</p>
+<p>消息消费者，负责消费消息，一般是后台系统负责异步消费</p>
 </li>
-<li><p>changed event：</p>
-<p>enabled with a call to exists and getdata.</p>
+<li><p>push consumer</p>
+<p>封装消息拉取，消费进程和内部</p>
 </li>
-<li><p>child event：</p>
-<p>enabled with a call getchildren</p>
+<li><p>pull consumer</p>
+<p>主动拉取消息，一旦拉取到消息，应用的消费进程进行初始化</p>
+</li>
+<li><p>producer group</p>
+<p>一类producer的集合名称，这类producer通常发送一类消息，且发送逻辑一致</p>
+</li>
+<li><p>consumer group</p>
+<p>一类consumer的集合名称，这类consumer通常消费一类消息，且消费逻辑一致</p>
+</li>
+<li><p>broker</p>
+<p>消息中转角色，负责存储消息，转发消息，这里就是rockermq server</p>
+</li>
+<li><p>topic</p>
+<p>消息的主题，用于定义并在服务端配置，消费者可以按主题进行订阅，也就是消息分类，通常一个系统一个topic</p>
+</li>
+<li><p>Message </p>
+<p>在生产者、消费者、服务器之间传递的消息，一个message必须属于一个topic</p>
+</li>
+<li><p>namesrv</p>
+<p>一个无状态的名称服务，可以集群部署，每一个broker启动的时候都会向名称服务器注册，主要</p>
+<p>是接收broker的注册，接收客户端的路由请求并发挥路由信息</p>
+</li>
+<li><p>offset</p>
+<p>偏移量，消费者拉取消息时需要知道上一次消费到了什么位置，这一次从哪里开始</p>
+</li>
+<li><p>partition</p>
+<ul>
+<li>分区，topic物理上的分组，一个topic可以分为多个分区，每个分区是一个有序队列。</li>
+</ul>
+<p>分区中的消息都会给分配一个有序的id，也就是偏移量</p>
+</li>
+<li><p>Tag</p>
+<p>用于对消息进行过滤，理解为message的标记，同一业务不同目的的message可以用相同的topic但是可以用不同的tag来区分</p>
+</li>
+<li><p>key</p>
+<p>消息的key字段是为了唯一表示消息的，为了方便查阅，不是说必须设置，只是说设置了方便开发和运维定位问题。比如：这个key可以是订单的id等。</p>
 </li>
 </ul>
-<h4 id="5-watch深入"><a href="#5-watch深入" class="headerlink" title="5.watch深入"></a>5.watch深入</h4><p><strong>watch重要特性</strong></p>
+<h3 id="3-安装运行"><a href="#3-安装运行" class="headerlink" title="3.安装运行"></a>3.安装运行</h3><h4 id="3-1环境准备"><a href="#3-1环境准备" class="headerlink" title="3.1环境准备"></a>3.1环境准备</h4><p>centos7、jdk8</p>
+<h4 id="3-2下载rocketmq"><a href="#3-2下载rocketmq" class="headerlink" title="3.2下载rocketmq"></a>3.2下载rocketmq</h4><p>官网下载 wget</p>
+<h4 id="3-3运行"><a href="#3-3运行" class="headerlink" title="3.3运行"></a>3.3运行</h4><p><strong>注意：</strong>  <em>启动默认 nameserver: 4g   broker：8g  需要调整</em></p>
+<p>nameserver默认占用内存配置在：/rocketmq/bin/runserver.sh      -Xms1g -Xmx1g </p>
+<p><em>broker默认使用内存大小配置： /rocketmq/bin/runbroker.sh             -Xms2g -Xmx2g</em> </p>
 <ul>
-<li>一次性触发：watch触发后即被删除。要持续监控变化，则需要持续设置watch</li>
-<li>有序性：客户端先得到watch通知，后才会看到变化结果</li>
+<li><p>启动nameserver:</p>
+<pre><code>          nohup sh mqnamesrv ~~-n &quot;192.168.164.131:9876&quot;~~&gt; ../logs/namesrv.log 2&gt;&amp;1 &amp;
+
+          查看运行进程 ps -ef|grep NamesrvStartup              </code></pre></li>
+<li><p>启动broker：</p>
+<pre><code>   nohup sh mqbroker ~~-n localhost:9876~~&gt;../logs/broker.log 2&gt;&amp;1 &amp;（并不完整）</code></pre><p>   nohup sh mqbroker -n localhost:9876 -c ../conf/broker.conf &gt;../logs/broker.log 2&gt;&amp;1 &amp;</p>
+<p>   指定加载配置文件</p>
+<p>   查看broker是否运行  ps -ef|grep broker</p>
+</li>
+<li><p>停止broker</p>
+<pre><code>   bin/mqshutdown broker</code></pre></li>
+<li><p>停止nameserver</p>
+<pre><code>   bin/mqshutdown namesrv</code></pre><p><strong>验证步骤</strong>:注意必须在同一个会话中</p>
+</li>
+<li><p>发送消息</p>
+<p>export NAMESRV_ADDR=localhost:9876</p>
+<p>bin/tools.sh org.apache.rocketmq.example.quickstart.Producer</p>
+</li>
+<li><p>接收消息</p>
+<p>bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer</p>
+<p><strong>注意：</strong>默认会发送很多数据，注意<del>_</del>‘’</p>
+</li>
 </ul>
-<p><strong>注意事项：</strong></p>
+<h4 id="3-4可视化工具"><a href="#3-4可视化工具" class="headerlink" title="3.4可视化工具"></a>3.4可视化工具</h4><h5 id="3-4-1-git-clone源码"><a href="#3-4-1-git-clone源码" class="headerlink" title="3.4.1. git clone源码"></a>3.4.1. git clone源码</h5><p> <code>git clone https://github.com/apache/rocketmq-externals</code></p>
+<h5 id="3-4-2-切换版本"><a href="#3-4-2-切换版本" class="headerlink" title="3.4.2. 切换版本"></a>3.4.2. 切换版本</h5><p> <code>git checkout rocketmq-console-1.0.0</code></p>
+<h5 id="3-4-3-编译为jar"><a href="#3-4-3-编译为jar" class="headerlink" title="3.4.3. 编译为jar"></a>3.4.3. 编译为jar</h5><p><code>mvn clean package -Dmaven.test.skip=true</code></p>
+<h5 id="3-4-4-启动"><a href="#3-4-4-启动" class="headerlink" title="3.4.4. 启动"></a>3.4.4. 启动</h5><pre><code># jar包在target目录下面，你可以放在一台服务器上面运行
+java -jar rocketmq-console-ng-1.0.0.jar --server.port=8081--rocketmq.config.namesrvAddr=192.168.100.242:9876
+# --server.port springboot内置tomcat的端口号，默认8080；
+# --rocketmq.config.namesrvAddr  nameserver的地址</code></pre><p>nohup java -jar rocketmq-console-ng-1.0.0.jar –server.port=8081–rocketmq.config.namesrvAddr=node1:9876&gt;rocketmqConsole.log 2&gt;&amp;1 &amp;</p>
+<h4 id="3-5应用"><a href="#3-5应用" class="headerlink" title="3.5应用"></a>3.5应用</h4><p>rocketmq的客户端：maven 依赖 org.apache.rocketmq  rocketmq-client</p>
+<h5 id="3-5-1java应用运行出现问题"><a href="#3-5-1java应用运行出现问题" class="headerlink" title="3.5.1java应用运行出现问题"></a>3.5.1java应用运行出现问题</h5><p>1.无法连接</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/22/gct09F.png" alt="gct09F.png"></p>
+<p>查看console控制台，集群部分，发现broker在namesrv上面注册地址和所在服务器实际地址不一致</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/22/gctXwr.png" alt="gctXwr.png"></p>
+<p><strong>*解决办法：</strong>broker端启动时，需要指定加载配置文件，并设置broker当前服务器ip</p>
+<p><em>nohup sh mqbroker -n localhost:9876 -c ../conf/broker.conf &gt;../logs/broker.log 2&gt;&amp;1 &amp;</em></p>
+<p>*参考：<a href="https://blog.csdn.net/huang_550/article/details/90693656" target="_blank" rel="noopener">https://blog.csdn.net/huang_550/article/details/90693656</a></p>
+<h2 id="二-架构方案及角色详解"><a href="#二-架构方案及角色详解" class="headerlink" title="二.架构方案及角色详解"></a>二.架构方案及角色详解</h2><ul>
+<li>RocketMQ角色介绍</li>
+<li>RocketMQ架构方案</li>
+<li>RocketMQ集群部署配置</li>
+</ul>
+<h3 id="1-角色介绍"><a href="#1-角色介绍" class="headerlink" title="1.角色介绍"></a>1.角色介绍</h3><p>RocketMQ由四个角色组成:</p>
 <ul>
-<li>watch是一次性触发器，如果您获得了一个watch事件，并且希望得到关于未来更改的通知，则必须设置另外一个watch</li>
-<li>因为是一次性的，并且获取事件和发送watch新请求之间存在延迟，所以不能可靠地得到节点发生的每个更改</li>
-<li>一个watch对象只会被特定的通知触发一次。如果一个watch对象同时注册了exists、getdata、当节点被删除时，删除事件对exists、getdata都有效，但是只会调用watch一次。</li>
+<li>producer:消息生产者</li>
+<li>consumer:消费者</li>
+<li>broker: MQ服务，负责接收、分发消息</li>
+<li>nameserver:负责mq服务之间的协调</li>
 </ul>
-<h4 id="6-zookeeper实现配置中心"><a href="#6-zookeeper实现配置中心" class="headerlink" title="6.zookeeper实现配置中心"></a>6.zookeeper实现配置中心</h4><p><strong>配置中心操作流程</strong></p>
-<p><img src="https://t1.picb.cc/uploads/2019/06/18/gudDQK.png" alt="gudDQK.png"></p>
-<p><strong>配置方式1</strong></p>
-<p><img src="https://t1.picb.cc/uploads/2019/06/18/gudEDN.png" alt="gudEDN.png"></p>
-<p><strong>配置方式2</strong></p>
-<p><img src="https://t1.picb.cc/uploads/2019/06/18/gudYne.png" alt="gudYne.png"></p>
-<h4 id="7"><a href="#7" class="headerlink" title="7."></a>7.</h4>
+<h3 id="2-架构方案"><a href="#2-架构方案" class="headerlink" title="2.架构方案"></a>2.架构方案</h3><p><img src="https://t1.picb.cc/uploads/2019/06/22/gCoI6R.png" alt="gCoI6R.png"></p>
+<h4 id="2-1Nameserver-Cluster"><a href="#2-1Nameserver-Cluster" class="headerlink" title="2.1Nameserver Cluster"></a>2.1Nameserver Cluster</h4><ul>
+<li>服务注册与发现</li>
+<li>路由管理</li>
+</ul>
+<p>nameserver 提供轻量级服务发现与路由。</p>
+<p>每个名称服务器记录完整的路由信息，提供相应的读写服务，并支持快速的存储扩展。</p>
+<h3 id="3-安装运行-1"><a href="#3-安装运行-1" class="headerlink" title="3.安装运行"></a>3.安装运行</h3><p>下载安装包，解压</p>
+<p>更改nameserver、broker默认内存配置</p>
+<p>./bin/mqadmin 命令管理工具</p>
+<p>./bin/mqadmin clusterlist -n</p>
+<p>​            </p>
+<p>​            </p>
+
             </div>
             <hr>
 
@@ -651,9 +702,9 @@ zk特性揭秘
             </div>
             <br>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
-                    《zookeeper》
+                    《RocketMQ》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/18/zookeeper/" property="cc:attributionName" rel="cc:attributionURL">
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/22/RocketMQ/" property="cc:attributionName" rel="cc:attributionURL">
                 keyj
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
@@ -694,30 +745,41 @@ zk特性揭秘
         
         <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2019/06/19/springCloud实践记录/">
+                <a href="/2019/06/22/RocketMQ/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="springCloud实践记录">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="RocketMQ">
                         
-                        <span class="card-title">springCloud实践记录</span>
+                        <span class="card-title">RocketMQ</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            环境三台centos7虚拟机：node1、node4、node5
-已搭建基础开发环境，服务发现、消息方、提供方、网关
-高可用eureka集群启动命令：
-java -jar discovery_ha-0.0.1-SNAPSHOT.jar –s
+                            一.RocketMQ入门1.特性
+原生分布式
+两种消息拉取
+严格消息顺序
+特有的分布式协调器
+亿级消息堆积
+组
+
+2.基本概念
+producer
+消息生产者，负责产生消息，一般由业务系统负责产生消息
+
+consumer
+消息消费者，负责消费
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-22
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-user fa-fw"></i>
@@ -726,15 +788,16 @@ java -jar discovery_ha-0.0.1-SNAPSHOT.jar –s
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/springCloud/" target="_blank">
-                        <span class="chip bg-color">springCloud</span>
+                    <a href="/tags/消息队列/" target="_blank">
+                        <span class="chip bg-color">消息队列</span>
                     </a>
                     
-                    <a href="/tags/分布式/" target="_blank">
-                        <span class="chip bg-color">分布式</span>
+                    <a href="/tags/RocketMQ/" target="_blank">
+                        <span class="chip bg-color">RocketMQ</span>
                     </a>
                     
                 </div>
@@ -748,27 +811,28 @@ java -jar discovery_ha-0.0.1-SNAPSHOT.jar –s
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/06/18/内存屏障和CPU缓存/">
+                <a href="/2019/06/21/日常问题记录/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="内存屏障和CPU缓存">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="日常问题记录">
                         
-                        <span class="card-title">内存屏障和CPU缓存</span>
+                        <span class="card-title">日常问题记录</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            CPU性能优化手段-缓存一、CPU性能优化-缓存为了提高程序运行的性能，现代CPU在很多方面对程序进行了优化。
-例如：CPU高速缓存。尽可能地避免处理器访问主内存的时间开销，处理器大多会利用缓存cache提高性能。
+                            centos7虚拟机1.每次虚拟机环境重启后ip都会变动，极不方便。
+设置静态ip，
+参考：https://www.cnblogs.com/jadedoo/p/9967111.html
 
-1、多级缓存L1 Ca
+
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-18
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-21
                             </span>
                         <span class="publish-author">
                             
@@ -777,22 +841,6 @@ java -jar discovery_ha-0.0.1-SNAPSHOT.jar –s
                             
                         </span>
                     </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/高性能编程/" target="_blank">
-                        <span class="chip bg-color">高性能编程</span>
-                    </a>
-                    
-                    <a href="/tags/多线程并发编程/" target="_blank">
-                        <span class="chip bg-color">多线程并发编程</span>
-                    </a>
-                    
-                    <a href="/tags/java基础/" target="_blank">
-                        <span class="chip bg-color">java基础</span>
-                    </a>
-                    
                 </div>
                 
             </div>

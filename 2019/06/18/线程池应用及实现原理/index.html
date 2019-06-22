@@ -5,7 +5,10 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="线程池应用及实现原理, seven">
-    <meta name="description" content="线程池应用及实现原理 | seven">
+    <meta name="description" content="为什么需要线程池一.为什么需要线程池线程是不是越多越好？
+
+线程在java中是一个对象，更是操作系统的资源，线程创建、销毁需要时间。如果创建时间+销毁时间&amp;gt;执行时间就很不合算。
+java对象占用堆内存，操作系统线程系统内存，根据jvm">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -372,9 +375,21 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/高性能编程/" target="_blank">
+                                <span class="chip bg-color">高性能编程</span>
+                            </a>
+                        
+                            <a href="/tags/多线程并发编程/" target="_blank">
+                                <span class="chip bg-color">多线程并发编程</span>
+                            </a>
+                        
+                            <a href="/tags/java基础/" target="_blank">
+                                <span class="chip bg-color">java基础</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -401,7 +416,63 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h4 id="为什么需要线程池"><a href="#为什么需要线程池" class="headerlink" title="为什么需要线程池"></a>为什么需要线程池</h4><h3 id="一-为什么需要线程池"><a href="#一-为什么需要线程池" class="headerlink" title="一.为什么需要线程池"></a>一.为什么需要线程池</h3><p><em>线程是不是越多越好？</em></p>
+<ul>
+<li>线程在java中是一个对象，更是操作系统的资源，线程创建、销毁需要时间。如果创建时间+销毁时间&gt;执行时间就很不合算。</li>
+<li>java对象占用堆内存，操作系统线程系统内存，根据jvm规范，一个线程默认最大栈大小为1M，这个栈空间是需要从系统内存中分配的。线程过多，会消耗很多的内存。</li>
+<li>操作系统需要频繁切换线程上下文，影响性能。</li>
+</ul>
+<p>线程池的推出，就是为了方便的控制线程数量。</p>
+<h3 id="二-线程池原理-概念"><a href="#二-线程池原理-概念" class="headerlink" title="二.线程池原理-概念"></a>二.线程池原理-概念</h3><ol>
+<li><strong>线程池管理器：</strong>用于创建并管理线程池，包括创建线程池，销毁线程池，添加新任务；</li>
+<li><strong>工作线程：</strong>线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；</li>
+<li><strong>工作接口：</strong>每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务入口，任务执行完成后的收尾工作，任务的执行状态等；</li>
+<li><strong>任务队列：</strong>用于存放没有处理的任务，提供一种缓冲机制；</li>
+</ol>
+<h4 id="线程池API-接口定义和实现类"><a href="#线程池API-接口定义和实现类" class="headerlink" title="线程池API-接口定义和实现类"></a>线程池API-接口定义和实现类</h4><table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">名称</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">接口</td>
+<td align="center">Executor</td>
+<td align="center">最上层接口，定义了执行任务的方法execute</td>
+</tr>
+<tr>
+<td align="center">接口</td>
+<td align="center">ExecutorService</td>
+<td align="center">继承了Executor接口，拓展了Callable、Future、关闭方法</td>
+</tr>
+<tr>
+<td align="center">接口</td>
+<td align="center">ScheduledExecutorService</td>
+<td align="center">继承了ExecutorService，增加了定时任务相关的方法</td>
+</tr>
+<tr>
+<td align="center">实现类</td>
+<td align="center">ThreadPoolExecutor</td>
+<td align="center">基础标准的线程池实现</td>
+</tr>
+<tr>
+<td align="center">实现类</td>
+<td align="center">ScheduledThreadPoolExecuto</td>
+<td align="center">继承ThreadPoolExecutor，实现了ScheduledExecutorService中相关定时任务的方法</td>
+</tr>
+</tbody></table>
+<h4 id="线程池API"><a href="#线程池API" class="headerlink" title="线程池API"></a>线程池API</h4><h4 id="线程池原理-任务execute过程"><a href="#线程池原理-任务execute过程" class="headerlink" title="线程池原理-任务execute过程"></a>线程池原理-任务execute过程</h4><ol>
+<li>是否达到核心线程数量?没达到，创建一个工作线程来执行任务</li>
+<li>工作队列是否已满？没满，则将新提交的任务存储在工作队列中</li>
+<li>是否达到线程池最大数量？没达到，则创建一个新的工作线程来执行任务</li>
+<li>最后，执行拒绝策略来处理这个任务</li>
+</ol>
+<h4 id="线程数量"><a href="#线程数量" class="headerlink" title="线程数量"></a>线程数量</h4><p><strong>计算型任务：</strong>CPU数量的1-2倍</p>
+<p><strong>IO型任务：</strong>相对比计算型任务，需要多一些线程，要根据具体的<strong>io阻塞时长</strong>进行考量决定。</p>
+<p>如tomcat中默认的最大线程数为:200</p>
+
             </div>
             <hr>
 
@@ -669,7 +740,9 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            线程封闭概念多线程访问共享可变数据时，涉及到线程间数据同步问题。并不是所有时候，都要用到共享数据，所以线程封闭概念就提出来了。
+数据都 被封闭在各自的线程之中，就不需要同步，这种通过将数据封闭在线程中而避免使用同步的技术称为线程封闭。
+线程
                         
                     </div>
                     <div class="publish-info">
@@ -683,6 +756,22 @@
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/高性能编程/" target="_blank">
+                        <span class="chip bg-color">高性能编程</span>
+                    </a>
+                    
+                    <a href="/tags/多线程并发编程/" target="_blank">
+                        <span class="chip bg-color">多线程并发编程</span>
+                    </a>
+                    
+                    <a href="/tags/java基础/" target="_blank">
+                        <span class="chip bg-color">java基础</span>
+                    </a>
+                    
                 </div>
                 
             </div>
