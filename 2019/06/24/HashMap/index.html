@@ -4,14 +4,15 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="线程状态, seven">
-    <meta name="description" content="线程状态一、六种线程状态6个状态定义，在java.lang.Thread.State中
+    <meta name="keywords" content="HashMap, seven">
+    <meta name="description" content="HashMap学习jdk源码的学习最重要是掌握学习方法
+集合hashMap的学习
 
-NEW： 尚未启动的线程的线程状态
+确定存储结构
 
-Runnable：可运行线程的线程状态，等待CPU的调度
-
-Blocked：线程阻塞等待监视器锁定的线程状态，处">
+基于jdk1.7
+1.存储对象结构
+int   DEFAULT_INITIAL_CAPACITY=1&amp;lt;&amp;lt;4          2">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +20,7 @@ Blocked：线程阻塞等待监视器锁定的线程状态，处">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>线程状态 | seven</title>
+    <title>HashMap | seven</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -263,13 +264,13 @@ Blocked：线程阻塞等待监视器锁定的线程状态，处">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        线程状态
+                        HashMap
                     </div>
                 </div>
             </div>
@@ -380,12 +381,12 @@ Blocked：线程阻塞等待监视器锁定的线程状态，处">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/线程状态/" target="_blank">
-                                <span class="chip bg-color">线程状态</span>
+                            <a href="/tags/集合/" target="_blank">
+                                <span class="chip bg-color">集合</span>
                             </a>
                         
-                            <a href="/tags/多线程/" target="_blank">
-                                <span class="chip bg-color">多线程</span>
+                            <a href="/tags/HashMap/" target="_blank">
+                                <span class="chip bg-color">HashMap</span>
                             </a>
                         
                     </div>
@@ -399,7 +400,7 @@ Blocked：线程阻塞等待监视器锁定的线程状态，处">
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-06-17
+                    2019-06-24
                 </div>
 
                 
@@ -415,25 +416,22 @@ Blocked：线程阻塞等待监视器锁定的线程状态，处">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h2><h3 id="一、六种线程状态"><a href="#一、六种线程状态" class="headerlink" title="一、六种线程状态"></a>一、六种线程状态</h3><p>6个状态定义，在java.lang.Thread.State中</p>
+                <h2 id="HashMap学习"><a href="#HashMap学习" class="headerlink" title="HashMap学习"></a>HashMap学习</h2><p><strong><em>jdk源码的学习最重要是掌握学习方法</em></strong></p>
+<p>集合hashMap的学习</p>
 <ol>
-<li><p>NEW： 尚未启动的线程的线程状态</p>
-</li>
-<li><p>Runnable：可运行线程的线程状态，等待CPU的调度</p>
-</li>
-<li><p>Blocked：线程阻塞等待监视器锁定的线程状态，处于synchronized同步代码块或方法中被阻塞。</p>
-</li>
-<li><p>Waiting： 等待线程的线程状态。下列不带超时时间的方式：</p>
-<p>Object.wait、Thread.join、LockSupport.park</p>
-</li>
-<li><p>Timed Waiting：具有指定等待时间的等待线程的线程状态</p>
-<p>Thread.Sleep、Object.wait 、Thread.join、 LockSupport.parkNanos、LockSupport.parkUntil</p>
-</li>
-<li><p>Terminated：终止线程的线程状态。线程正常完成执行或者出现异常</p>
-</li>
+<li>确定存储结构</li>
 </ol>
-<h3 id="二、线程状态切换"><a href="#二、线程状态切换" class="headerlink" title="二、线程状态切换"></a>二、线程状态切换</h3><p><img src="C:%5CUsers%5Ckeyj%5CDesktop%5C%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81.png" alt></p>
-<h3 id="三、线程状态切换代码实例"><a href="#三、线程状态切换代码实例" class="headerlink" title="三、线程状态切换代码实例"></a>三、线程状态切换代码实例</h3>
+<p>基于jdk1.7</p>
+<h4 id="1-存储对象结构"><a href="#1-存储对象结构" class="headerlink" title="1.存储对象结构"></a>1.存储对象结构</h4><p><img src="https://t1.picb.cc/uploads/2019/06/24/gcM9tr.png" alt="gcM9tr.png"></p>
+<p>int   DEFAULT_INITIAL_CAPACITY=1&lt;&lt;4          2^4=16  </p>
+<p>int MAXIMUM_CAPACITY   1&lt;&lt;30                   2^30</p>
+<p>float DEFAULT_LOAD_FACTOR   0.75f  </p>
+<h4 id="2-确定结构"><a href="#2-确定结构" class="headerlink" title="2.确定结构"></a>2.确定结构</h4><p><img src="https://t1.picb.cc/uploads/2019/06/24/gcML5J.png" alt="gcML5J.png"></p>
+<p>经查看类里面调用情况，<strong>table</strong>成员可以确定为hashmap里面存储对象的结构定义</p>
+<p>通过类功能、结构去推测。</p>
+<p>hashMap存储对象结构为一个<strong>数组</strong>，数组内数据为Entry&lt;k,v&gt;, 该类为hashmap的内部类。</p>
+<h4 id="3-每个put内容都是转成了一个entry实例进行存储："><a href="#3-每个put内容都是转成了一个entry实例进行存储：" class="headerlink" title="3.每个put内容都是转成了一个entry实例进行存储："></a>3.每个put内容都是转成了一个entry实例进行存储：</h4><p><img src="https://t1.picb.cc/uploads/2019/06/24/gcOdbs.png" alt="gcOdbs.png"></p>
+
             </div>
             <hr>
 
@@ -588,9 +586,9 @@ Blocked：线程阻塞等待监视器锁定的线程状态，处">
             </div>
             <br>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
-                    《线程状态》
+                    《HashMap》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/17/线程状态/" property="cc:attributionName" rel="cc:attributionURL">
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/06/24/HashMap/" property="cc:attributionName" rel="cc:attributionURL">
                 keyj
             </a> 采用
             <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
@@ -633,25 +631,27 @@ Blocked：线程阻塞等待监视器锁定的线程状态，处">
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/06/17/kafka/">
+                <a href="/2019/06/24/java位运算/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="kafka">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="java位运算">
                         
-                        <span class="card-title">kafka</span>
+                        <span class="card-title">java位运算</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            简介一、简介linkedin公司出品，使用scala（spark也是基于此语言）编写，具有高水平扩展和高吞吐量的分布式消息系统。
-kafka对消息保存根据topic进行分类，集群中实例称之为broker。发送消息者为producer，消息接
+                            1. 简介位运算符主要针对二进制，它包括了： “与”、“非”、“或”、“异或”。从表面上看似乎有点像逻辑运算符，但逻辑运算符是针对两个关系运算符来进行逻辑运算，而位运算符主要针对两个二进制数的位进行逻辑运算。
+与： &amp;
+或： |
+非
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-17
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-24
                         </span>
                         <span class="publish-author">
                             
@@ -664,16 +664,12 @@ kafka对消息保存根据topic进行分类，集群中实例称之为broker。�
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/中间件/" target="_blank">
-                        <span class="chip bg-color">中间件</span>
+                    <a href="/tags/java基础/" target="_blank">
+                        <span class="chip bg-color">java基础</span>
                     </a>
                     
-                    <a href="/tags/消息队列/" target="_blank">
-                        <span class="chip bg-color">消息队列</span>
-                    </a>
-                    
-                    <a href="/tags/kafka/" target="_blank">
-                        <span class="chip bg-color">kafka</span>
+                    <a href="/tags/位运算/" target="_blank">
+                        <span class="chip bg-color">位运算</span>
                     </a>
                     
                 </div>
@@ -687,29 +683,27 @@ kafka对消息保存根据topic进行分类，集群中实例称之为broker。�
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/06/17/java程序运行堆栈分析/">
+                <a href="/2019/06/23/少有人走的路/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="java程序运行堆栈分析">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="少有人走的路">
                         
-                        <span class="card-title">java程序运行堆栈分析</span>
+                        <span class="card-title">少有人走的路</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1、字节码文件初识.class文件格式为二进制，开头为固定0xcafebabe
-2、jvm运行时数据区
-线程共享：方法区（永久代—-》元数据空间）  、堆内存
-线程独享：虚拟机栈、本地方法栈、程序计数器
-
-3、字节码文件内容​       
+                            第一部分:自侓自律是解决人生问题最主要的工具，也是消除人生痛苦最重要的方法。
+1.问题和痛苦0623
+人生苦难重重。
+     这是个伟大的真理，是世界上最伟大的真理之一。它的伟大之处在于，一旦我们领悟了这句话的真谛，就能从苦难中解脱出来，
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-17
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-23
                             </span>
                         <span class="publish-author">
                             
@@ -718,6 +712,14 @@ kafka对消息保存根据topic进行分类，集群中实例称之为broker。�
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/阅读/" target="_blank">
+                        <span class="chip bg-color">阅读</span>
+                    </a>
+                    
                 </div>
                 
             </div>

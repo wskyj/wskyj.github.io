@@ -545,8 +545,188 @@ java -jar rocketmq-console-ng-1.0.0.jar --server.port=8081--rocketmq.config.name
 <p>更改nameserver、broker默认内存配置</p>
 <p>./bin/mqadmin 命令管理工具</p>
 <p>./bin/mqadmin clusterlist -n</p>
-<p>​            </p>
-<p>​            </p>
+<h3 id="4-集群"><a href="#4-集群" class="headerlink" title="4.集群"></a>4.集群</h3><p>在应用包下有双主双从同步、双主双从异步、主从配置文件例子</p>
+<p>nameserver集群不互相同步数据，会保存所有broker信息</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/23/gcC5q8.png" alt="gcC5q8.png"></p>
+<p>配置说明1</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/23/gcC8Tg.png" alt="gcC8Tg.png"></p>
+<p>配置说明2</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/23/gcCMtX.png" alt="gcCMtX.png"></p>
+<p>配置说明3</p>
+<p><img src="https://t1.picb.cc/uploads/2019/06/23/gcCO5G.png" alt="gcCO5G.png"></p>
+<h2 id="三-有序消息"><a href="#三-有序消息" class="headerlink" title="三.有序消息"></a>三.有序消息</h2><p>场景：同时存钱、取钱短信通知</p>
+<h3 id="1-有序消息"><a href="#1-有序消息" class="headerlink" title="1.有序消息"></a>1.有序消息</h3><pre><code>    有序消息又叫顺序消息(FIFO消息)，是指消息的消费顺序和产生顺序相同，在有些业务逻辑下，必须保证顺序。比如订单的生成、付款、发货，这个消息必须按顺序处理才行。顺序消息分为**全局顺序**和**分区(queue)顺序**</code></pre><h4 id="1-1全局顺序"><a href="#1-1全局顺序" class="headerlink" title="1.1全局顺序"></a>1.1全局顺序</h4><pre><code>   一个topic内所有的消息都发布到同一个queue中，按照先进先出的顺序进行发布和消费。
+
+  ***适用场景:***性能要求不高，所有的消息严格按照FIFO原则进行消息发布和消费的场景</code></pre><h4 id="1-2-分区顺序"><a href="#1-2-分区顺序" class="headerlink" title="1.2 分区顺序"></a>1.2 分区顺序</h4><pre><code>  对于指定的一个Topic,所有的消息根据sharding key 进行区块(queue)分区，同一个queue内的消息按照严格的FIFO顺序进行发布和消费。
+
+    sharding key 是顺序消息中用来区分不同分区的关键手段，和普通消息的key是完全不同的概念。</code></pre><p>​         <strong><em>适用场景</em></strong>:性能要求高，根据消息中的sharding key去决定消费发送到哪一个queue。</p>
+<h4 id="1-3-全局顺序和分区顺序对比"><a href="#1-3-全局顺序和分区顺序对比" class="headerlink" title="1.3 全局顺序和分区顺序对比"></a>1.3 全局顺序和分区顺序对比</h4><ul>
+<li><p>消息类型对比</p>
+<table>
+<thead>
+<tr>
+<th>消息类型</th>
+<th>支持事务消息</th>
+<th>支持定时消息</th>
+<th>性能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无序消息(普通、事务、定时、延时消息)</td>
+<td>是</td>
+<td>是</td>
+<td>最高</td>
+</tr>
+<tr>
+<td>分区顺序消息</td>
+<td>否</td>
+<td>否</td>
+<td>高</td>
+</tr>
+<tr>
+<td>全局顺序消息</td>
+<td>否</td>
+<td>否</td>
+<td>一般</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>发送方式对比</p>
+<table>
+<thead>
+<tr>
+<th>消息类型</th>
+<th>支持可靠同步发送</th>
+<th>支持可靠异步发送</th>
+<th>支持oneway发送</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无序消息(普通、事务、定时、延时)</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>分区顺序消息</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>全局顺序消息</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="2-如何保证消息顺序"><a href="#2-如何保证消息顺序" class="headerlink" title="2.如何保证消息顺序"></a>2.如何保证消息顺序</h3><p>在MQ的模型中，顺序需要由3个阶段去保障：</p>
+<ol>
+<li>消息被发送时保持顺序</li>
+<li>消息被存储时保持和发送的顺序一致</li>
+<li>消息被消费时保持和存储的顺序一致</li>
+</ol>
+<h3 id="3-RocketMQ顺序消息的实现"><a href="#3-RocketMQ顺序消息的实现" class="headerlink" title="3.RocketMQ顺序消息的实现"></a>3.RocketMQ顺序消息的实现</h3><p>RocketMQ消费端有两种类型，MQPullConsumer和MQPushConsumer</p>
+<p>本质上底层都是通过pull机制去实现，pushConsumer是一种API封装</p>
+<h4 id="3-1MQPullConsumer"><a href="#3-1MQPullConsumer" class="headerlink" title="3.1MQPullConsumer"></a>3.1MQPullConsumer</h4><pre><code>     MQPullConsumer 由用户控制线程，主动从服务端获取消息，每次获取到的是一个MessageQueue中的消息。PullResult中的List&lt;MessageExt&gt; msgFoundList自然和存储顺序一致，用户需要再拿到这批消息后自己保证消费的顺序。</code></pre><h4 id="3-2MQPushConsumer"><a href="#3-2MQPushConsumer" class="headerlink" title="3.2MQPushConsumer"></a>3.2MQPushConsumer</h4><pre><code>    MQPushConsumer由用户注册MessageListener来消费消息，在客户端中需要保证调用MessageListener时消息的顺序性。</code></pre><h3 id="4-有序消息的缺陷"><a href="#4-有序消息的缺陷" class="headerlink" title="4.有序消息的缺陷"></a>4.有序消息的缺陷</h3><pre><code>    发送顺序消息无法利用集群的FailOver特性，因为不能更换MessageQueue进行重试，因为发送的路由策略导致的热点问题，可能某一些MessageQueue的数据量特别大</code></pre><ul>
+<li>消费的并行读依赖于queue数量</li>
+<li>消费失败时无法跳过</li>
+</ul>
+<h3 id="5-有序消息的使用"><a href="#5-有序消息的使用" class="headerlink" title="5.有序消息的使用"></a>5.有序消息的使用</h3><p>官网教程：<a href="http://rocketmq.apache.org/docs/order-example" target="_blank" rel="noopener">http://rocketmq.apache.org/docs/order-example</a></p>
+<h2 id="四-订阅机制和定时消息"><a href="#四-订阅机制和定时消息" class="headerlink" title="四.订阅机制和定时消息"></a>四.订阅机制和定时消息</h2><ul>
+<li>发布订阅的基本概念</li>
+<li>RocketMQ订阅模式实现原理</li>
+<li>使用订阅模式</li>
+<li>定时消息的基本概念</li>
+<li>Broker定时消息发送逻辑</li>
+<li>使用定时消息</li>
+</ul>
+<h3 id="1-发布订阅"><a href="#1-发布订阅" class="headerlink" title="1.发布订阅"></a>1.发布订阅</h3><pre><code>    发布订阅模式又叫观察者模式，它定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖它的对象都将得到通知。</code></pre><h3 id="2-RocketMQ的发布订阅"><a href="#2-RocketMQ的发布订阅" class="headerlink" title="2.RocketMQ的发布订阅"></a>2.RocketMQ的发布订阅</h3><p>RocketMQ的消息订阅分为两种模式:</p>
+<ul>
+<li><p>Push模式（MQPushConsumer）：broker主动向消费者推送</p>
+</li>
+<li><p>Pull模式(MQPullConsumer):消费者在需要消息时，主动到broker拉取</p>
+<p>在rocketmq具体实现中，push和pull模式都是采用消费者主动从broker拉取消息。</p>
+</li>
+</ul>
+<h3 id="3-定时消息"><a href="#3-定时消息" class="headerlink" title="3.定时消息"></a>3.定时消息</h3><pre><code>   定时消息是指消息发送到broker后，不能立刻被Consumer消费，要到特定的时间点或者等待特定的时间后才能被消费。
+
+  如果要支持任意的时间精度，在broker层面，必须要做消息排序，如果再涉及到持久化，那么消息排序要不可避免的产生巨大性能开销。
+
+ RocketMQ支持定时消息，但是不支持任意时间精度，支持特定的level级别，例如，定时5s、10s、1m等。</code></pre><p><strong><em>使用定时消息，官方提供例子</em></strong>：<a href="http://rocketmq.apache.org/docs/schedule-example/" target="_blank" rel="noopener">http://rocketmq.apache.org/docs/schedule-example/</a></p>
+<h2 id="五-批量消息和事务消息"><a href="#五-批量消息和事务消息" class="headerlink" title="五.批量消息和事务消息"></a>五.批量消息和事务消息</h2><h3 id="1-批量消息"><a href="#1-批量消息" class="headerlink" title="1.批量消息"></a>1.批量消息</h3><pre><code>     在很多调优时，比如数据库批量处理，有些请求进行合并发送等都是类似批量的实现。RocketMQ批量发送也是为了追求性能，特别在消息数量特别大的时候，批量效果就非常明显。</code></pre><h4 id="1-1-使用批量消息的限制"><a href="#1-1-使用批量消息的限制" class="headerlink" title="1.1.使用批量消息的限制"></a>1.1.使用批量消息的限制</h4><ul>
+<li>同一批次的消息应该具有相同主题、相同的消息配置</li>
+<li>不支持延迟消息</li>
+<li>建议一个批量消息大小最好不要超过<strong>1MB</strong></li>
+</ul>
+<p><strong><em>官方实例：</em></strong><a href="http://rocketmq.apache.org/docs/batch-example" target="_blank" rel="noopener">http://rocketmq.apache.org/docs/batch-example</a></p>
+<h3 id="2-事务消息"><a href="#2-事务消息" class="headerlink" title="2.事务消息"></a>2.事务消息</h3><pre><code>   RocketMQ的事务消息，是指Producer端消息发送事件和本地事务事件，同时成功或同时失败。</code></pre><p><img src="https://t1.picb.cc/uploads/2019/06/23/gcc7Aa.png" alt="gcc7Aa.png"></p>
+<h4 id="2-1事务消息的使用约束"><a href="#2-1事务消息的使用约束" class="headerlink" title="2.1事务消息的使用约束"></a>2.1事务消息的使用约束</h4><ul>
+<li><p>事务消息不支持定时和批量</p>
+</li>
+<li><p>为了避免一个消息被多次检查，导致半数队列消息堆积，RocketMQ限制了单个消息的默认检查次数为15次，</p>
+<p>通过修改broker配置文件中的transactionCheckMax参数进行调整</p>
+</li>
+<li><p>特定的时间段之后才检查事务，通过broker配置文件参数transactionTimeOut或用户配置CHECK_IMMUNITY_TIME_IN_SECONDS调整时间</p>
+</li>
+<li><p>一个事务消息可能被检查或消费多次</p>
+</li>
+<li><p>提交过的消息重新放到用户目标主题可能会失败</p>
+</li>
+<li><p>事务消息的生产者ID不能与其他类型消息的生产者ID共享</p>
+</li>
+</ul>
+<h4 id="2-2事务状态"><a href="#2-2事务状态" class="headerlink" title="2.2事务状态"></a>2.2事务状态</h4><p>三种事务消息状态：</p>
+<p>TransactionStatus.CommitTransaction 提交事务，允许消费者消费这个消息</p>
+<p>TransactionStatus.RollbackTransaction 回滚事务，消息将会被删除或不再允许消费</p>
+<p>TransactionStatus.Unknown 中间状态，MQ需要重新检查来确定状态</p>
+<h2 id="六-RocketMQ中高性能最佳实践"><a href="#六-RocketMQ中高性能最佳实践" class="headerlink" title="六.RocketMQ中高性能最佳实践"></a>六.RocketMQ中高性能最佳实践</h2><h3 id="1-最佳实践之Producer"><a href="#1-最佳实践之Producer" class="headerlink" title="1.最佳实践之Producer"></a>1.最佳实践之Producer</h3><ol>
+<li><p>一个应用尽可能用一个Topic，消息子类型用tags来标识，tags可以由应用自由设置。</p>
+<p>只有发送消息设置了tags，消费方在订阅消息时，才可以利用tags在broker做消息过滤</p>
+</li>
+<li><p>每个消息在业务层面的唯一标识码，要设置到keys字段，方便将来定位消息丢失问题</p>
+<p>服务器会为每个消息创建索引（哈希索引），应用可以通过topic，key来查询这条消息内容，以及消息被谁消费。</p>
+<p>由于是哈希索引，请务必保证key尽可能唯一，这样可以避免潜在的哈希冲突。</p>
+</li>
+<li><p>如有可靠性需要，消息发送成功或者失败，要打印消息日志（sendresule和key信息）</p>
+</li>
+<li><p>如果相同性质的消息量大，使用批量消息，可以提升性能</p>
+</li>
+<li><p>建议消息大小不超过512KB</p>
+</li>
+<li><p>send(msg) 会阻塞，如果有性能要求，可以使用异步的方式：send(msg,callback)</p>
+</li>
+<li><p>如果在一个jvm中，有多个生产者进行大数据处理，建议：</p>
+<ul>
+<li>少数生产者使用异步发送方式(3~5个)</li>
+<li>通过setinstanceName方法，给每一个生产者设置一个实例名</li>
+</ul>
+</li>
+<li><p>send消息方法，只要不抛出异常，就代表发送成功。但是发送成功会有多个状态，在sendresule里定义</p>
+<ul>
+<li>SEND_OK：消息发送成功</li>
+<li>FLUSH_DISK_TIMEOUT：消息发送成功，但是服务器刷盘超时，消息已经进入服务器队列，只有此时服务器宕机，消息才会丢失</li>
+<li>FLUSH_SLAVE_TIMEOUT : 消息发送成功，但是服务器同步到slave时超时，消息已经进入服务器队列，只有此时服务器宕机，消息才会丢失</li>
+<li>SLAVE_NOT_AVAILABLE：消息发送成功，但是此时slave不可用，消息已经进入服务器队列，此时只有服务器宕机，消息才会丢失</li>
+<li>如果状态是FLUSH_DISK_TIMEOUT或FLUSH_SLAVE_TIMEOUT，并且broker正好关闭，此时可以丢失这条消息，或者重发。建议最好重发，由消费者去重</li>
+<li>Producer向broker发送请求会等待响应，但如果达到最大等待时间，未得到响应，则客户端将抛出RemotingTimeoutException</li>
+<li>默认等待时间是3秒，如果使用send(msg,timeout),则可以自己设定超时时间，但超时时间不能设置太小，因为broker需要一些时间来刷新磁盘或与从属设备同步</li>
+<li>如果该值超过syncFlushTimeout ,则该值可能影响不大，因为broker可能会在超时之前返回FLUSH_SLAVE_TIMEOUT或FLUSH_SLAVE_TIMEOUT的响应</li>
+</ul>
+</li>
+<li><p>对于消息不可丢失应用，务必要有消息重复机制</p>
+<p>Producer的send方法本身支持内部重试：</p>
+<ul>
+<li>至多重试3次</li>
+<li>如果发送失败，则轮转到下一个broker</li>
+<li>这个方法的总耗时时间不超过sendmsgtimeout设置的值，默认10s。所以如果本身向broker发送消息产生超时异常，就不会再做重试</li>
+</ul>
+<p>以上策略仍然不能保证消息一定发送成功，为保证消息一定成功，建议将消息存储到db，由后台线程定时重试，保证消息一定到达broker。</p>
+</li>
+</ol>
+<h3 id="2-最佳实践之Consumer"><a href="#2-最佳实践之Consumer" class="headerlink" title="2.最佳实践之Consumer"></a>2.最佳实践之Consumer</h3><h3 id="3-最佳实践之NameServer"><a href="#3-最佳实践之NameServer" class="headerlink" title="3.最佳实践之NameServer"></a>3.最佳实践之NameServer</h3><h3 id="4-JVM-与Linux内核配置"><a href="#4-JVM-与Linux内核配置" class="headerlink" title="4.JVM 与Linux内核配置"></a>4.JVM 与Linux内核配置</h3><p>​            </p>
 
             </div>
             <hr>
@@ -745,41 +925,30 @@ java -jar rocketmq-console-ng-1.0.0.jar --server.port=8081--rocketmq.config.name
         
         <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
-            </div>
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/06/22/RocketMQ/">
+                <a href="/2019/06/23/少有人走的路/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="RocketMQ">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="少有人走的路">
                         
-                        <span class="card-title">RocketMQ</span>
+                        <span class="card-title">少有人走的路</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            一.RocketMQ入门1.特性
-原生分布式
-两种消息拉取
-严格消息顺序
-特有的分布式协调器
-亿级消息堆积
-组
-
-2.基本概念
-producer
-消息生产者，负责产生消息，一般由业务系统负责产生消息
-
-consumer
-消息消费者，负责消费
+                            第一部分:自侓自律是解决人生问题最主要的工具，也是消除人生痛苦最重要的方法。
+1.问题和痛苦0623
+人生苦难重重。
+     这是个伟大的真理，是世界上最伟大的真理之一。它的伟大之处在于，一旦我们领悟了这句话的真谛，就能从苦难中解脱出来，
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-22
-                            </span>
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-23
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-user fa-fw"></i>
@@ -788,16 +957,11 @@ consumer
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/消息队列/" target="_blank">
-                        <span class="chip bg-color">消息队列</span>
-                    </a>
-                    
-                    <a href="/tags/RocketMQ/" target="_blank">
-                        <span class="chip bg-color">RocketMQ</span>
+                    <a href="/tags/阅读/" target="_blank">
+                        <span class="chip bg-color">阅读</span>
                     </a>
                     
                 </div>
@@ -823,10 +987,10 @@ consumer
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            centos7虚拟机1.每次虚拟机环境重启后ip都会变动，极不方便。
-设置静态ip，
+                            centos7虚拟机1.每次虚拟机环境重启后ip都会变动，极不方便。设置静态ip，
 参考：https://www.cnblogs.com/jadedoo/p/9967111.html
 
+2.idea将鼠标定位到上次编辑的位置
 
                         
                     </div>
