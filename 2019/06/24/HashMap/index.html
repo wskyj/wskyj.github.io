@@ -428,9 +428,62 @@ int   DEFAULT_INITIAL_CAPACITY=1&amp;lt;&amp;lt;4          2">
 <p>float DEFAULT_LOAD_FACTOR   0.75f  </p>
 <h4 id="2-确定结构"><a href="#2-确定结构" class="headerlink" title="2.确定结构"></a>2.确定结构</h4><p><img src="https://t1.picb.cc/uploads/2019/06/24/gcML5J.png" alt="gcML5J.png"></p>
 <p>经查看类里面调用情况，<strong>table</strong>成员可以确定为hashmap里面存储对象的结构定义</p>
+<pre><code class="java">transient Entry&lt;K,V&gt;[] table = (Entry&lt;K,V&gt;[]) EMPTY_TABLE;</code></pre>
 <p>通过类功能、结构去推测。</p>
 <p>hashMap存储对象结构为一个<strong>数组</strong>，数组内数据为Entry&lt;k,v&gt;, 该类为hashmap的内部类。</p>
 <h4 id="3-每个put内容都是转成了一个entry实例进行存储："><a href="#3-每个put内容都是转成了一个entry实例进行存储：" class="headerlink" title="3.每个put内容都是转成了一个entry实例进行存储："></a>3.每个put内容都是转成了一个entry实例进行存储：</h4><p><img src="https://t1.picb.cc/uploads/2019/06/24/gcOdbs.png" alt="gcOdbs.png"></p>
+<h4 id="4-put一条新数据"><a href="#4-put一条新数据" class="headerlink" title="4.put一条新数据"></a>4.put一条新数据</h4><pre><code class="java">public V put(K key, V value) {
+    //若 table数组为空，则初始化
+    if (table == EMPTY_TABLE) {
+        inflateTable(threshold);
+    }
+    if (key == null)
+        return putForNullKey(value);
+    //计算hash、用户确定数据存储在数组那个位置
+    int hash = hash(key);
+    //计算数据存储在数组那个位置
+    int i = indexFor(hash, table.length);
+    for (Entry&lt;K,V&gt; e = table[i]; e != null; e = e.next) {
+        Object k;
+        if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) {
+            V oldValue = e.value;
+            e.value = value;
+            e.recordAccess(this);
+            return oldValue;
+        }
+    }
+
+    modCount++;
+    addEntry(hash, key, value, i);
+    return null;
+}</code></pre>
+<pre><code class="java">private void inflateTable(int toSize) {
+    // Find a power of 2 &gt;= toSize
+    //用来返回大于等于最接近number的2的冪数
+    int capacity = roundUpToPowerOf2(toSize);
+
+    threshold = (int) Math.min(capacity * loadFactor, MAXIMUM_CAPACITY + 1);
+    table = new Entry[capacity];
+    initHashSeedAsNeeded(capacity);
+}</code></pre>
+<p>hashmap 的数据结构为<strong><em>数组+链表结构</em></strong></p>
+<p>新增一个数据时</p>
+<ul>
+<li>key已存在，覆盖原数据</li>
+<li>key不存在<ul>
+<li>发生冲突，在原位置设置当前新值，新值的下一个节点为旧节点数据</li>
+<li>不发生冲突，直接在数组位置设置entry</li>
+</ul>
+</li>
+</ul>
+<p>查询数据时：</p>
+<pre><code> 确定在数组的位置，再遍历当前位置上的链表</code></pre><p>jdk：工具，提供高性能、便捷、持久维护</p>
+<p>hashmap  结构提高数组的查询速度，所以需要限制链表的长度，</p>
+<p>数组扩容：</p>
+<pre><code>    map中元素数量&gt;阈值，并且本次冲突
+
+     阈值=12</code></pre><p>hashmap扩容前最大能存储27个元素， 12+15；</p>
+<p>扩容为：原来数组的两倍大小；  </p>
 
             </div>
             <hr>
