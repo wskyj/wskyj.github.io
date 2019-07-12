@@ -1,0 +1,1022 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="CDN, seven">
+    <meta name="description" content="1. 使用CND实现应用的缓存和加速1.1 CND简介CDN的全称是Content Delivery Network,即内容分发网络。
+
+CDN是构建在网络之上的内容分发网络；
+CDN使用户就近获取所需内容，降低网络堵塞，提供用户访问响应速">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>CDN | seven</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+</head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">seven</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">seven</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank" data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewbox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        CDN
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/负责均衡/" target="_blank">
+                                <span class="chip bg-color">负责均衡</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-07-11
+                </div>
+
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h3 id="1-使用CND实现应用的缓存和加速"><a href="#1-使用CND实现应用的缓存和加速" class="headerlink" title="1. 使用CND实现应用的缓存和加速"></a>1. 使用CND实现应用的缓存和加速</h3><h4 id="1-1-CND简介"><a href="#1-1-CND简介" class="headerlink" title="1.1 CND简介"></a>1.1 CND简介</h4><p>CDN的全称是Content Delivery Network,即内容分发网络。</p>
+<ul>
+<li>CDN是构建在网络之上的内容分发网络；</li>
+<li>CDN使用户就近获取所需内容，降低网络堵塞，提供用户访问响应速度和命中率；</li>
+<li>CND依靠部署在各地的边缘服务器，包括中心平台的负载均衡、内容分发、调度等功能模块；</li>
+</ul>
+<p>可以使用<strong>dig  域名 命令</strong> 查看解析信息</p>
+<p><img src="https://t1.picb.cc/uploads/2019/07/11/gHw7U8.png" alt="gHw7U8.png"></p>
+<p><img src="https://t1.picb.cc/uploads/2019/07/11/gHwv6g.png" alt="gHwv6g.png"></p>
+<h4 id="1-2-CND主要特点"><a href="#1-2-CND主要特点" class="headerlink" title="1.2 CND主要特点"></a>1.2 CND主要特点</h4><ul>
+<li><strong>本地cache加速：</strong>提高了企业站点，尤其是含有大量图片和静态页面站点的访问速度，并大大提高以上性质站点的稳定性</li>
+<li><strong>镜像服务：</strong>消除了不同运营商之间互联的瓶颈造成的影响，实现了跨运营商的网络加速，保证不同网络中的用户都能得到良好的访问质量</li>
+<li><strong>远程加速：</strong>远程访问用户根据DNS负载均衡技术智能自动选择cache服务器，选择最快的cache服务器，加快远程访问速度</li>
+<li><strong>带宽优化：</strong>自动生成服务器的远程mirror镜像cache服务器，远程用户访问时从cache服务器上读取数据，减少远程访问的带宽、分担网络流量、减轻原站点web服务器负载等功能</li>
+<li><strong>集群抗攻击：</strong>广泛分布的CDN节点加上节点之间的智能冗余机制，可以有效预防黑客入侵及降低各种DOS攻击对网站的影响，同时保证较好的服务质量</li>
+</ul>
+<h4 id="1-3-CND服务模式"><a href="#1-3-CND服务模式" class="headerlink" title="1.3 CND服务模式"></a>1.3 CND服务模式</h4><p>内容分发网络是一个经策略性部署的整体系统，包括以下3个要件：</p>
+<ul>
+<li><strong>分发服务系统：</strong>最基本的工作单元就是cache设备，cache负责直接响应最终用户的访问请求，把缓存在本地的内容快速地提供给用户。同时cache还负责与源站点进行内容同步，把更新的内容及本地没有的内容从源站点获取并保存在本地。<strong>cache设备的数量、规模、总服务能力是衡量一个cdn系统服务能力的最基本的指标</strong></li>
+<li><strong>负载均衡系统：</strong>主要功能是负责对所有发起服务请求的用户进行访问调度，确定提供给用户的最终实际访问地址。两级调度体系分为全局负载均衡GSLB和本地负载均衡SLB。GSLB主要根据用户就近原则，通过对每个服务节点进行最优判断，确定向用户提供服务的cache的物理位置。SLB主要负责节点内部的设备负载均衡</li>
+<li><strong>运营管理系统：</strong>分为运营管理和网络管理子系统，负责处理业务层面的与外界系统交互所必须的收集、整理、交付工作，包含客户管理、产品管理、计费管理、统计分析等功能</li>
+</ul>
+<h4 id="1-4-CND工作流程"><a href="#1-4-CND工作流程" class="headerlink" title="1.4 CND工作流程"></a>1.4 CND工作流程</h4><h5 id="1-4-1-常规web请求处理流程"><a href="#1-4-1-常规web请求处理流程" class="headerlink" title="1.4.1 常规web请求处理流程"></a>1.4.1 <strong>常规web请求处理流程</strong></h5><ol>
+<li><p>用户在自己的浏览器中输入要访问的网站域名</p>
+</li>
+<li><p>浏览器向本地DNS域名解析器服务器请求对该域名的解析</p>
+</li>
+<li><p>本地DNS服务器中如果缓存有这个域名的解析结果，则直接响应用户的解析请求</p>
+</li>
+<li><p>本地DNS服务器中如果没有关于这个域名的解析结果的缓存，则以递归方式向整个DNS系统请求解析，获得应答后将结果反馈给浏览器</p>
+</li>
+<li><p>浏览器得到域名解析结果，就是改域名相应的服务设备的IP地址</p>
+</li>
+<li><p>浏览器向服务器请求内容</p>
+</li>
+<li><p>服务器将用户请求内容传送给浏览器</p>
+<p><img src="https://t1.picb.cc/uploads/2019/07/11/gHw3MX.png" alt="gHw3MX.png"></p>
+</li>
+</ol>
+<h5 id="1-4-2-引入CDN后web请求处理流程"><a href="#1-4-2-引入CDN后web请求处理流程" class="headerlink" title="1.4.2 引入CDN后web请求处理流程"></a>1.4.2 <strong>引入CDN后web请求处理流程</strong></h5><ol>
+<li>当用户点击网站页面的内容url，经过本地DNS系统解析，DNS系统会最终将域名的解析权交给cname指向的cdn专用DNS服务器</li>
+<li>cdn的dns服务器将cdn的全局负载均衡设备ip地址返回给用户</li>
+<li>用户向cdn的全局负载均衡设备发起内容url访问请求</li>
+<li>cdn全局负载均衡设备根据用户ip地址，及用户请求的内容url，选择一台用户所属区域负载均衡设备，让用户向这台设备发起请求</li>
+<li>区域负载均衡设备会为用户选择一台合适的缓存服务器提供服务</li>
+<li>用户向缓存服务器发起请求，缓存服务器响应用户的请求，将所需内容传送到用户终端</li>
+<li>如果这台缓存服务器上并没有用户想要的内容，那么这台服务器就要向它的上一级缓存服务器请求内容，直至追溯到网站的原服务器将内容拉倒本地</li>
+</ol>
+<h4 id="1-5-CND关键技术"><a href="#1-5-CND关键技术" class="headerlink" title="1.5 CND关键技术"></a>1.5 CND关键技术</h4><p><strong>缓存算法：</strong></p>
+<p>缓存代理软件：squid</p>
+<p>缓存算法决定命中率、源服务器压力、ftp节点存储能力</p>
+<p><strong>分发能力：</strong></p>
+<p>分发能力取决于IDC能力和IDC策略性分布</p>
+<p><strong>负载均衡：</strong></p>
+<p>软件：nginx</p>
+<p>负载均衡智能调度决定最佳路由、响应时间、可用性、服务质量</p>
+<p><strong>基于DNS</strong></p>
+<p>DNS服务器软件：BIND</p>
+<ol>
+<li>基于DNS的负载均衡以CNAME实现域名中转，智能最优节点服务</li>
+<li>缓存点有客户端浏览器缓存、本地DNS服务器缓存</li>
+<li>缓存内容有DNS地址缓存、客户请求内容缓存、动态内容缓存</li>
+</ol>
+<p><strong>支持协议：</strong></p>
+<p>支持协议如静动态加速（图片加速、https带证书加速）、下载加速、流媒体加速、企业应用加速、手机应用加速</p>
+<h3 id="2-通过DNS实现高可靠的负载均衡和访问提速"><a href="#2-通过DNS实现高可靠的负载均衡和访问提速" class="headerlink" title="2. 通过DNS实现高可靠的负载均衡和访问提速"></a>2. 通过DNS实现高可靠的负载均衡和访问提速</h3><h4 id="2-1-DNS简介"><a href="#2-1-DNS简介" class="headerlink" title="2.1 DNS简介"></a>2.1 DNS简介</h4><p>DNS Domain Name System 域名系统，其主要作用是将主机名解析成IP地址的过程，完成了从域名到主机识别IP地址之间的转换。</p>
+<ol>
+<li>DNS是一个分布式、分层次的主机名管理架构，通过配置DNS服务器地址，主机不需要知道对应的ip地址就能通过主机名的形式访问互联网</li>
+<li>DNS利用类似倒状树的目录结构将主机名的管理分配在不同层级的DNS服务器当中，经过分层管理，每一级DNS服务器负责部分域名信息，这就减轻了DNS服务器的负载，同时也方便记录的更新同步</li>
+<li>DNS是一个网络服务，因此有对应的端口，其端口为<strong>53</strong>。DNS查询的时候，是以<strong>UDP</strong>这个快速的数据传输协议来查询的，但万一没有方法查询到完整的信息时，就会再次以tcp这个协议来重新查询，DNS服务在启动的时候会同时开启tcp的53端口和udp的53端口</li>
+<li>DNS在进行区域传输是的时候使用TCP协议，其他时候则使用UDP协议</li>
+<li>FQDN(full Qualified Domain Name): 完整主机名，是有主机名和域名构成。<a href="http://www.baidu.com中www就是web服务器的主机名，baidu.com就是域名" target="_blank" rel="noopener">www.baidu.com中www就是web服务器的主机名，baidu.com就是域名</a></li>
+<li>DNS是基于c/s架构，对应每一级域名长度的限制是63个字符，域名总长度则不超过253个字符</li>
+<li>DNS系统记录的信息非常多，不过重点就两个：一个是记录服务器所在的NS（name server）标志，另一个则是记录主机名对应的A（address）标志</li>
+</ol>
+<h4 id="2-2-DNS的域名结构"><a href="#2-2-DNS的域名结构" class="headerlink" title="2.2 DNS的域名结构"></a>2.2 DNS的域名结构</h4><ol>
+<li>DNS的域名是倒状的树形结构，在最底层的是一个根服务器，它主要负责顶级域名的管理</li>
+<li>一级域名共分为3类，组织域、国家域和反响域，最多可以有127级域名</li>
+<li>每一级的域名服务器只负责对应下级的域的管理，其中根节点是分布在世界各地的13台服务器组成，其中10台位于美国地区，另外3台在英国、瑞典、日本</li>
+</ol>
+<h4 id="2-3-DNS工作原理"><a href="#2-3-DNS工作原理" class="headerlink" title="2.3 DNS工作原理"></a>2.3 DNS工作原理</h4><p>DNS解析域名到ip要经过三个阶段：</p>
+<ol>
+<li>本地DNS缓存解析</li>
+<li>本地DNS服务器解析，递归查询</li>
+<li>根域及各级域名服务器解析，迭代查询</li>
+</ol>
+<h4 id="2-4-DNS负载均衡"><a href="#2-4-DNS负载均衡" class="headerlink" title="2.4 DNS负载均衡"></a>2.4 DNS负载均衡</h4><p>DNS负载均衡技术的实现原理是：在DNS服务器中为同一个主机名配置多个ip地址，多个ip地址以轮询的方式选择。</p>
+<p>在linux服务器上使用DIG工具查看具体对域名的解析；</p>
+<h4 id="2-5-DNS和其他负载均衡"><a href="#2-5-DNS和其他负载均衡" class="headerlink" title="2.5 DNS和其他负载均衡"></a>2.5 DNS和其他负载均衡</h4><ol>
+<li><p><strong>DNS负载均衡</strong></p>
+<p>对同一个请求的域名映射为不同的服务器ip地址</p>
+</li>
+<li><p><strong>HTTP重定向</strong></p>
+<p>http代理比如浏览器向web服务器请求某一个url后，web服务器根据http响应头信息中的location标记来返回一个新的url，然后http代理继续请求访问这个新的url</p>
+</li>
+<li><p><strong>反向代理负载均衡</strong></p>
+<p>以代理服务器来接收web服务器的连接请求，然后转发给内部网络中不同的web服务器，并将从web服务器请求得到的结果返回给请求连接的客户端，以nginx为代表</p>
+</li>
+<li><p><strong>NAT负载均衡</strong></p>
+<p>将公网地址映射为多个私网地址，解决IP地址紧张，不想外部网络知道内部网络结构的问题</p>
+</li>
+<li><p><strong>CND</strong></p>
+<p>通过发布机制将内容同步到大量的缓存节点，并在DNS服务器上进行扩展，找到离用户最近的缓存节点作为服务提供节点</p>
+</li>
+<li><p><strong>混合型负载均衡</strong></p>
+<p>在有些大型网络中，由于多个服务器群内硬件设备、各自的规模、提供的服务等差异，可以考虑给每个服务器群采用最合适的负载均衡方式，然后又在这多个服务器群之间再一次负载均衡或群集起来以一个整体向外界提供服务（即把这多个服务器集群当作一个新的服务器群），从而达到最佳的性能</p>
+</li>
+</ol>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png">
+                </a>
+            </div>
+            <br>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">
+                    《CDN》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/07/11/CDN/" property="cc:attributionName" rel="cc:attributionURL">
+                keyj
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2019/07/12/数据结构和算法/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="数据结构和算法">
+                        
+                        <span class="card-title">数据结构和算法</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1.概述
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-07-12
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            keyj
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/数据结构/" target="_blank">
+                        <span class="chip bg-color">数据结构</span>
+                    </a>
+                    
+                    <a href="/tags/算法/" target="_blank">
+                        <span class="chip bg-color">算法</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/07/11/设计模式/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="设计模式">
+                        
+                        <span class="card-title">设计模式</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            . 设计模式类型一. 设计模式类型A.创建型模式：
+
+单例模式
+工厂模式
+抽象工厂模式
+建造者模式
+原型模式
+
+B.结构型模式：
+
+适配器模式
+桥接模式
+装饰模式
+组合模式
+外观模式
+享元模式
+代理模式
+
+C.行为型模式
+
+模版方法模式
+命
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-07-11
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            keyj
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/设计模式/" target="_blank">
+                        <span class="chip bg-color">设计模式</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://blinkfox.github.io/" target="_blank">Blinkfox</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 的
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>主题搭建.
+
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:xxx@xx.xx" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=123123123" class="tooltipped" data-tooltip="QQ联系我: 123123123" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>

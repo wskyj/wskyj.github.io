@@ -5,10 +5,9 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta name="keywords" content="Redis, seven">
-    <meta name="description" content="1. redis基础1.1常用数据类型redis是内存型key-value日志型数据库，数据类型是相对于value而言。
-string 字符串类型
-hash hash类型、key-value hashmap类型
-list    列表类型、数">
+    <meta name="description" content="1. Redis基础1.1 Redis介绍 Redis是一个开源的使用C语言编写、支持网络、可基于内存亦可持久化的日志型、key-value数据库，并提供多种语言的API。
+本质是客户端-服务端应用软件程序。
+特点是使用简单，性能强悍、功能">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -412,13 +411,254 @@ list    列表类型、数">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="1-redis基础"><a href="#1-redis基础" class="headerlink" title="1. redis基础"></a>1. redis基础</h3><h4 id="1-1常用数据类型"><a href="#1-1常用数据类型" class="headerlink" title="1.1常用数据类型"></a>1.1常用数据类型</h4><p>redis是内存型key-value日志型数据库，数据类型是相对于value而言。</p>
+                <h2 id="1-Redis基础"><a href="#1-Redis基础" class="headerlink" title="1. Redis基础"></a>1. Redis基础</h2><h3 id="1-1-Redis介绍"><a href="#1-1-Redis介绍" class="headerlink" title="1.1 Redis介绍"></a>1.1 Redis介绍</h3><p> Redis是一个开源的使用C语言编写、支持网络、可基于内存亦可持久化的日志型、key-value数据库，并提供多种语言的API。</p>
+<p>本质是客户端-服务端应用软件程序。</p>
+<p>特点是使用简单，性能强悍、功能应用场景丰富。</p>
+<h3 id="1-2-通用命令"><a href="#1-2-通用命令" class="headerlink" title="1.2 通用命令"></a>1.2 通用命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>del key</td>
+<td>该命令用于在key存在时删除key</td>
+</tr>
+<tr>
+<td>dump key</td>
+<td>序列号给定的key，并返回被序列化的值</td>
+</tr>
+<tr>
+<td>exists key</td>
+<td>检查给定的key是否存在</td>
+</tr>
+<tr>
+<td>expire key seconds</td>
+<td>为给定key设置过期时间，以秒计</td>
+</tr>
+<tr>
+<td>ttl key</td>
+<td>以秒为单位，返回给定key的剩余生存时间(TTL Time to live)</td>
+</tr>
+<tr>
+<td>type key</td>
+<td>返回key所存储的值的类型</td>
+</tr>
+<tr>
+<td>key *</td>
+<td>返回所有的key列表</td>
+</tr>
+</tbody></table>
+<h3 id="1-3-常用数据结构"><a href="#1-3-常用数据结构" class="headerlink" title="1.3 常用数据结构"></a>1.3 常用数据结构</h3><p><strong><em>备注：在官网中有每个命令的讲解*</em></strong><a href="https://redis.io/commands" target="_blank" rel="noopener">https://redis.io/commands</a>***</p>
+<p>redis是内存型key-value日志型数据库，数据类型是相对于<strong>value</strong>而言。</p>
 <p>string 字符串类型</p>
 <p>hash hash类型、key-value hashmap类型</p>
 <p>list    列表类型、数组</p>
 <p>set 无序列表</p>
 <p>zset 有序列表</p>
-<h3 id="2-持久化"><a href="#2-持久化" class="headerlink" title="2.  持久化"></a>2.  持久化</h3><h4 id="2-1-介绍"><a href="#2-1-介绍" class="headerlink" title="2.1 介绍"></a>2.1 介绍</h4><pre><code>  redis的数据都存放在内存中，如果没有配置持久化，redis重启后数据就全丢失了，于是需要开启redis的持久化功能，将数据保存在磁盘上，当redis重启后，可以从磁盘中恢复数据。</code></pre><h4 id="2-2-持久化方式"><a href="#2-2-持久化方式" class="headerlink" title="2.2 持久化方式"></a>2.2 持久化方式</h4><h5 id="2-2-1-RDB持久化"><a href="#2-2-1-RDB持久化" class="headerlink" title="2.2.1 RDB持久化"></a>2.2.1 RDB持久化</h5><p>   1、RDB持久化能够在指定的时间间隔对你的数据进行快照存储。</p>
+<h4 id="1-3-1-String"><a href="#1-3-1-String" class="headerlink" title="1.3.1 String"></a>1.3.1 String</h4><p>String 数据结构是简单的key-value类型，value其实不仅是String，也可以是数字。</p>
+<p><strong>使用场景：微博数，粉丝数</strong></p>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>get</td>
+<td>获取指定的key</td>
+</tr>
+<tr>
+<td>set</td>
+<td>设置指定key的值</td>
+</tr>
+<tr>
+<td>incr</td>
+<td>将key中存储的数字值增一（非数值型数据会报(error) ERR value is not an integer or out of range）</td>
+</tr>
+<tr>
+<td>decr</td>
+<td>将key中存储的数字值减一（限制操作数值数据）</td>
+</tr>
+<tr>
+<td>mget</td>
+<td>获取所有（一个或者多个）给定key的值</td>
+</tr>
+</tbody></table>
+<p><strong>set语法</strong>：</p>
+<pre><code class="shell">#设置时可以指定过期时间、NX不存在即设置 XX 一直设置
+set key value [expiration EX seconds|PX milliseconds] [NX|XX]</code></pre>
+<h4 id="1-3-2-List"><a href="#1-3-2-List" class="headerlink" title="1.3.2 List"></a>1.3.2 List</h4><p>List跟java中列表集合一样，底层是链表实现；</p>
+<p><strong>使用场景:</strong>微博的关注列表、粉丝列表</p>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lpush</td>
+<td>将一个或多个值插入到列表<strong>头部</strong></td>
+</tr>
+<tr>
+<td>Rpush</td>
+<td>在列表中添加一个或多个值</td>
+</tr>
+<tr>
+<td>Lpop</td>
+<td>移出并获取列表的第一个元素</td>
+</tr>
+<tr>
+<td>Rpop</td>
+<td>移除列表的最后一个元素，返回值为移除的元素</td>
+</tr>
+<tr>
+<td>Lrange</td>
+<td>获取所有（一个或多个）给的key的值</td>
+</tr>
+</tbody></table>
+<h4 id="1-3-3-Set"><a href="#1-3-3-Set" class="headerlink" title="1.3.3 Set"></a>1.3.3 Set</h4><p>Set就是一个集合，集合的概念就是一堆不重复值的组合。利用Redis提供的set数据结构，可以存储一些集合性的数据。</p>
+<p><strong>使用场景：</strong>实现如共同关注、共同爱好、二度好友</p>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sadd</td>
+<td>添加一个或多个成员</td>
+</tr>
+<tr>
+<td>spop</td>
+<td>移除并返回集合中的一个随机元素</td>
+</tr>
+<tr>
+<td>smembers</td>
+<td>返回集合中的所有成员</td>
+</tr>
+<tr>
+<td>sunion</td>
+<td>返回所有给定集合的并集</td>
+</tr>
+</tbody></table>
+<h4 id="1-3-4-Sorted-Set"><a href="#1-3-4-Sorted-Set" class="headerlink" title="1.3.4 Sorted Set"></a>1.3.4 Sorted Set</h4><p>Sorted set 的使用场景与set类似，区别是set不是自动有序的，而sorted set可以通过用户额外提供一个优先级<strong>score</strong>的参数来为成员排序，并且是插入有序的，即自动排序。</p>
+<p><strong>使用场景：</strong>排行榜、按照用户投票和时间排序</p>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>zadd</td>
+<td>向有序集合添加一个或多个成员，或者更新已存在成员的分数</td>
+</tr>
+<tr>
+<td>zrange</td>
+<td>通过索引区间返回有序集合中指定区间内的成员 可以附带withscores返回分数</td>
+</tr>
+<tr>
+<td>zrem</td>
+<td>移除有序集合中的一个或多个成员</td>
+</tr>
+<tr>
+<td>zcard</td>
+<td>获取有序集合的成员数</td>
+</tr>
+</tbody></table>
+<h4 id="1-3-5-Hash"><a href="#1-3-5-Hash" class="headerlink" title="1.3.5 Hash"></a>1.3.5 Hash</h4><p>Hash是一个String类型的field和value的映射表</p>
+<p><strong>使用场景：</strong>存储部分变更数据，如用户信息</p>
+<p><strong>常用命令</strong></p>
+<table>
+<thead>
+<tr>
+<th>hget</th>
+<th>获取存储在哈希表中指定字段的值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>hset</td>
+<td>将哈希表key中的字段field的值设为value</td>
+</tr>
+<tr>
+<td>hgetall</td>
+<td>获取在哈希表中指定key的所有字段和值</td>
+</tr>
+</tbody></table>
+<h4 id="1-3-6-GEO"><a href="#1-3-6-GEO" class="headerlink" title="1.3.6 GEO"></a>1.3.6 GEO</h4><p>GEO 3.2版本开始对GEO （地理位置）的支持</p>
+<p><strong>使用场景：</strong>LBS应用开发</p>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th>geoadd</th>
+<th>增加地理位置的坐标，可以批量添加地理位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>geodist</td>
+<td>获取两个地理位置的距离</td>
+</tr>
+<tr>
+<td>geohash</td>
+<td>获取某个地理位置的geohash值</td>
+</tr>
+<tr>
+<td>geopos</td>
+<td>获取指定位置的坐标，可以批量获取多个地理位置的坐标</td>
+</tr>
+<tr>
+<td>georadius</td>
+<td>根据给定地理位置坐标获取指定范围内的地理位置集合（注意该命令的中心点由输入的经度和纬度决定）</td>
+</tr>
+<tr>
+<td>georadiusbymember</td>
+<td>根据给定成员的位置获取指定范围内的位置信息集合（注意该命令的中心点是由给定的位置元素决定）</td>
+</tr>
+</tbody></table>
+<h4 id="1-3-7-Stream"><a href="#1-3-7-Stream" class="headerlink" title="1.3.7 Stream"></a><strong>1.3.7</strong> Stream</h4><p>Stream5.0 版本开始的新结构 流</p>
+<p><strong>使用场景：</strong>消费者生产者场景，类似MQ</p>
+<p><strong>常用命令：</strong></p>
+<table>
+<thead>
+<tr>
+<th>xadd</th>
+<th>往指定的流中添加消息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>xlen</td>
+<td>stream流中的消息数量</td>
+</tr>
+<tr>
+<td>xdel</td>
+<td>删除流中的消息</td>
+</tr>
+<tr>
+<td>xrange</td>
+<td>返回流中满足给定id范围的消息</td>
+</tr>
+<tr>
+<td>xread</td>
+<td>从一个或者多个流中读取消息</td>
+</tr>
+<tr>
+<td>xinfo</td>
+<td>检索关于流和关联的消费者组的不同的信息</td>
+</tr>
+</tbody></table>
+<h3 id="1-4-安装运行"><a href="#1-4-安装运行" class="headerlink" title="1.4 安装运行"></a>1.4 安装运行</h3><p>redis.conf配置文件注释：参考redis配置文件注解</p>
+<h2 id="2-持久化"><a href="#2-持久化" class="headerlink" title="2.  持久化"></a>2.  持久化</h2><h3 id="2-1-介绍"><a href="#2-1-介绍" class="headerlink" title="2.1 介绍"></a>2.1 介绍</h3><pre><code>  redis的数据都存放在内存中，如果没有配置持久化，redis重启后数据就全丢失了，于是需要开启redis的持久化功能，将数据保存在磁盘上，当redis重启后，可以从磁盘中恢复数据。</code></pre><h3 id="2-2-持久化方式"><a href="#2-2-持久化方式" class="headerlink" title="2.2 持久化方式"></a>2.2 持久化方式</h3><h4 id="2-2-1-RDB持久化"><a href="#2-2-1-RDB持久化" class="headerlink" title="2.2.1 RDB持久化"></a>2.2.1 RDB持久化</h4><p>   1、RDB持久化能够在指定的时间间隔对你的数据进行快照存储。</p>
 <p>   2、客户端直接通过命令BGSAVE或者SAVE来创建一个内存快照：</p>
 <ul>
 <li><p>BGSAVE调用fork来创建一个子进程，子进程负责将快照写入磁盘，而父进程仍然继续处理命令。</p>
@@ -451,7 +691,7 @@ save 60 10000</code></pre>
 <td>如果数据集非常大且CPU不够强（比如单核CPU）,redis在fork子进程时可能会消耗相对较长的时间，影响redis对外提供服务的能力</td>
 </tr>
 </tbody></table>
-<h5 id="2-2-2-AOF-持久化"><a href="#2-2-2-AOF-持久化" class="headerlink" title="2.2.2 AOF 持久化"></a>2.2.2 AOF 持久化</h5><p> (append only file)</p>
+<h4 id="2-2-2-AOF-持久化"><a href="#2-2-2-AOF-持久化" class="headerlink" title="2.2.2 AOF 持久化"></a>2.2.2 AOF 持久化</h4><p> (append only file)</p>
 <p>AOF持久化方式记录每次对服务器写的操作，当服务器重启的时候会更新执行这些命令来恢复原始的数据</p>
 <p><strong>相关参数：</strong></p>
 <p>开启AOF持久化： appendonly yes</p>
@@ -483,7 +723,7 @@ appendfsync no</code></pre>
 <td>数据恢复数据比RDB慢</td>
 </tr>
 </tbody></table>
-<h3 id="3-内存管理"><a href="#3-内存管理" class="headerlink" title="3. 内存管理"></a>3. 内存管理</h3><h4 id="3-1不同数据类型的大小限制"><a href="#3-1不同数据类型的大小限制" class="headerlink" title="3.1不同数据类型的大小限制"></a>3.1不同数据类型的大小限制</h4><ul>
+<h2 id="3-内存管理"><a href="#3-内存管理" class="headerlink" title="3. 内存管理"></a>3. 内存管理</h2><h3 id="3-1-不同数据类型的大小限制"><a href="#3-1-不同数据类型的大小限制" class="headerlink" title="3.1 不同数据类型的大小限制"></a>3.1 不同数据类型的大小限制</h3><ul>
 <li>String类型：一个String类型的value最大可以存储512M</li>
 <li>List类型：List的元素个数最多为2^32-1个，也就是4294967295个</li>
 <li>Set类型：元素个数最多为2^32-1个，也就是4294967295个</li>
@@ -492,7 +732,7 @@ appendfsync no</code></pre>
 <pre><code class="shell">#最大内存控制
 maxmemory 最大内存阈值
 maxmemory-policy 到达阈值的执行策略</code></pre>
-<h4 id="3-2-内存压缩"><a href="#3-2-内存压缩" class="headerlink" title="3.2 内存压缩"></a>3.2 内存压缩</h4><pre><code class="shell">#配置字段最多512个
+<h3 id="3-2-内存压缩"><a href="#3-2-内存压缩" class="headerlink" title="3.2 内存压缩"></a>3.2 内存压缩</h3><pre><code class="shell">#配置字段最多512个
 hash-max-zipmap-entries 512
 #配置value最大为64字节
 hash-max-zipmap-value 64
@@ -509,18 +749,18 @@ zset-max-ziplist-entries 128
 #配置value最大为64字节
 zset-max-ziplist-value 64</code></pre>
 <p><strong><em>备注</em>：大小超出压缩范围，溢出后Redis将自动将其转换为正常大小</strong></p>
-<h4 id="3-3过期数据的处理策略"><a href="#3-3过期数据的处理策略" class="headerlink" title="3.3过期数据的处理策略"></a>3.3过期数据的处理策略</h4><h5 id="3-3-1主动处理"><a href="#3-3-1主动处理" class="headerlink" title="3.3.1主动处理"></a>3.3.1主动处理</h5><p>redis主动触发检测key是否过期，每秒执行10次，过程如下：</p>
+<h3 id="3-3-过期数据的处理策略"><a href="#3-3-过期数据的处理策略" class="headerlink" title="3.3 过期数据的处理策略"></a>3.3 过期数据的处理策略</h3><h4 id="3-3-1主动处理"><a href="#3-3-1主动处理" class="headerlink" title="3.3.1主动处理"></a>3.3.1主动处理</h4><p>redis主动触发检测key是否过期，每秒执行10次，过程如下：</p>
 <ol>
 <li>从具有相关过期的密钥集合中测试20个随机密钥</li>
 <li>删除找到的所有密钥已过期</li>
 <li>如果超过25%的密钥已过期，请从步骤1重新开始</li>
 </ol>
-<h5 id="3-3-2-被动处理"><a href="#3-3-2-被动处理" class="headerlink" title="3.3.2 被动处理"></a>3.3.2 被动处理</h5><p>每次访问key时，发现超时后被动处理，清理掉</p>
-<h4 id="3-4数据恢复阶段过期数据的处理策略"><a href="#3-4数据恢复阶段过期数据的处理策略" class="headerlink" title="3.4数据恢复阶段过期数据的处理策略"></a>3.4数据恢复阶段过期数据的处理策略</h4><h5 id="3-4-1RDB方式"><a href="#3-4-1RDB方式" class="headerlink" title="3.4.1RDB方式"></a>3.4.1RDB方式</h5><p>过期的key不会被持久化到文件中。</p>
+<h4 id="3-3-2-被动处理"><a href="#3-3-2-被动处理" class="headerlink" title="3.3.2 被动处理"></a>3.3.2 被动处理</h4><p>每次访问key时，发现超时后被动处理，清理掉</p>
+<h3 id="3-4-数据恢复阶段过期数据的处理策略"><a href="#3-4-数据恢复阶段过期数据的处理策略" class="headerlink" title="3.4 数据恢复阶段过期数据的处理策略"></a>3.4 数据恢复阶段过期数据的处理策略</h3><h4 id="3-4-1-RDB方式"><a href="#3-4-1-RDB方式" class="headerlink" title="3.4.1 RDB方式"></a>3.4.1 RDB方式</h4><p>过期的key不会被持久化到文件中。</p>
 <p>载入时过期的key，会通过redis的主动和被动方式清理掉。</p>
-<h5 id="3-4-2AOF方式"><a href="#3-4-2AOF方式" class="headerlink" title="3.4.2AOF方式"></a>3.4.2AOF方式</h5><p>当redis使用AOF方式持久化时，每次遇到过期的key redis会追加一条del命令到AOF文件，也就是说只要我们顺序载入执行AOF命令文件就会删除过期的键。</p>
+<h4 id="3-4-2-AOF方式"><a href="#3-4-2-AOF方式" class="headerlink" title="3.4.2 AOF方式"></a>3.4.2 AOF方式</h4><p>当redis使用AOF方式持久化时，每次遇到过期的key redis会追加一条del命令到AOF文件，也就是说只要我们顺序载入执行AOF命令文件就会删除过期的键。</p>
 <p><strong>注意</strong>：过期数据的计算和计算机本身的时间是有直接联系的。</p>
-<h4 id="3-5内存回收策略"><a href="#3-5内存回收策略" class="headerlink" title="3.5内存回收策略"></a>3.5内存回收策略</h4><p>配置文件中设置：maxmemory-policy <em>noeviction</em></p>
+<h3 id="3-5-内存回收策略"><a href="#3-5-内存回收策略" class="headerlink" title="3.5 内存回收策略"></a>3.5 内存回收策略</h3><p>配置文件中设置：maxmemory-policy <em>noeviction</em></p>
 <p>动态调整：config set maxmemory-policy <em>noeviction</em></p>
 <table>
 <thead>
@@ -562,14 +802,14 @@ zset-max-ziplist-value 64</code></pre>
 <td>回收已经过期的key，并且优先回收存活时间(TTL)较短的键</td>
 </tr>
 </tbody></table>
-<h5 id="3-5-1LRU算法"><a href="#3-5-1LRU算法" class="headerlink" title="3.5.1LRU算法"></a>3.5.1LRU算法</h5><p>LRU（Least recently used,最近最少使用）：根据数据的访问历史记录来进行淘汰数据</p>
+<h4 id="3-5-1-LRU算法"><a href="#3-5-1-LRU算法" class="headerlink" title="3.5.1 LRU算法"></a>3.5.1 LRU算法</h4><p>LRU（Least recently used,最近最少使用）：根据数据的访问历史记录来进行淘汰数据</p>
 <ul>
 <li>核心思想：如果数据最近被访问过，那么将来被访问的几率也更高</li>
 <li>注意：redis的lru算法并非完整的实现，完整的lru实现是因为需要太多的内存</li>
 <li>方法：通过对少量keys进行取样(50%)，然后回收其中一个最好的key</li>
 <li>配置方式： maxmemory-samples 5</li>
 </ul>
-<h5 id="3-5-2LFU算法"><a href="#3-5-2LFU算法" class="headerlink" title="3.5.2LFU算法"></a>3.5.2LFU算法</h5><p>LFU（Least Frequently Used） 根据数据的历史访问频率来淘汰数据</p>
+<h4 id="3-5-2-LFU算法"><a href="#3-5-2-LFU算法" class="headerlink" title="3.5.2 LFU算法"></a>3.5.2 LFU算法</h4><p>LFU（Least Frequently Used） 根据数据的历史访问频率来淘汰数据</p>
 <ul>
 <li>核心思想：如果数据过去被访问多次，那么将来被访问的频率也更高</li>
 <li>redis实现的是近似的实现，每次对key进行访问时，用基于概率的对数计数器来记录访问次数，同时这个计数器会随时间推移而减小</li>
@@ -579,7 +819,7 @@ zset-max-ziplist-value 64</code></pre>
 <ul>
 <li>启用LFU算法后，可以使用热点数据分析功能。redis-cli –hotkeys</li>
 </ul>
-<h3 id="4-主从复制"><a href="#4-主从复制" class="headerlink" title="4. 主从复制"></a>4. 主从复制</h3><h4 id="4-1解决问题及场景"><a href="#4-1解决问题及场景" class="headerlink" title="4.1解决问题及场景"></a>4.1解决问题及场景</h4><p>使用主从复制原因：</p>
+<h2 id="4-主从复制"><a href="#4-主从复制" class="headerlink" title="4. 主从复制"></a>4. 主从复制</h2><h3 id="4-1-解决问题及场景"><a href="#4-1-解决问题及场景" class="headerlink" title="4.1 解决问题及场景"></a>4.1 解决问题及场景</h3><p>使用主从复制原因：</p>
 <ul>
 <li>redis-server单点故障；</li>
 <li>单节点QPS有限；</li>
@@ -589,10 +829,10 @@ zset-max-ziplist-value 64</code></pre>
 <li>读写分离场景，规避redis单机瓶颈</li>
 <li>故障切换，master出问题后还有slave节点可以使用</li>
 </ul>
-<h4 id="4-2搭建主从复制"><a href="#4-2搭建主从复制" class="headerlink" title="4.2搭建主从复制"></a>4.2搭建主从复制</h4><p>主Redis server以普通模式启动，主要是从服务器的启动方式：命令行、配置文件</p>
-<h5 id="4-2-1命令行方式"><a href="#4-2-1命令行方式" class="headerlink" title="4.2.1命令行方式"></a>4.2.1命令行方式</h5><pre><code class="shell">#连接需要实现从节点的redis，执行下面的命令
+<h3 id="4-2-搭建主从复制"><a href="#4-2-搭建主从复制" class="headerlink" title="4.2 搭建主从复制"></a>4.2 搭建主从复制</h3><p>主Redis server以普通模式启动，主要是从服务器的启动方式：命令行、配置文件</p>
+<h4 id="4-2-1-命令行方式"><a href="#4-2-1-命令行方式" class="headerlink" title="4.2.1 命令行方式"></a>4.2.1 命令行方式</h4><pre><code class="shell">#连接需要实现从节点的redis，执行下面的命令
 slaveof [ip] [port]</code></pre>
-<h5 id="4-2-2配置文件方式"><a href="#4-2-2配置文件方式" class="headerlink" title="4.2.2配置文件方式"></a>4.2.2配置文件方式</h5><pre><code class="shell">#配置文件中增加
+<h4 id="4-2-2-配置文件方式"><a href="#4-2-2-配置文件方式" class="headerlink" title="4.2.2 配置文件方式"></a>4.2.2 配置文件方式</h4><pre><code class="shell">#配置文件中增加
 slaveof [ip] [port]
 #从服务器是否只读（默认yes）
 slave-read-only yes</code></pre>
@@ -601,7 +841,7 @@ slave-read-only yes</code></pre>
 <p>新版本中：  slaveof 将由 replicaof 替换</p>
 <p>命令行中： info replication 可以查看集群信息</p>
 <p><img src="https://t1.picb.cc/uploads/2019/07/04/g4WID1.png" alt="g4WID1.png"></p>
-<h4 id="4-3主从复制核心知识"><a href="#4-3主从复制核心知识" class="headerlink" title="4.3主从复制核心知识"></a>4.3主从复制核心知识</h4><ul>
+<h3 id="4-3-主从复制核心知识"><a href="#4-3-主从复制核心知识" class="headerlink" title="4.3 主从复制核心知识"></a>4.3 主从复制核心知识</h3><ul>
 <li>redis默认使用异步复制，slave和master之间异步地确认处理的数据量</li>
 <li>一个master可以拥有多个slave</li>
 <li>slave可以接受其他slave的连接，slave可以有下级sub slave</li>
@@ -609,50 +849,50 @@ slave-read-only yes</code></pre>
 <li>slave初次同步需要删除旧数据，加载新数据，会阻塞到来的连接请求</li>
 </ul>
 <p><img src="https://t1.picb.cc/uploads/2019/07/04/g4Wnid.png" alt="g4Wnid.png"></p>
-<h4 id="4-4主从复制应用场景"><a href="#4-4主从复制应用场景" class="headerlink" title="4.4主从复制应用场景"></a>4.4主从复制应用场景</h4><ul>
+<h3 id="4-4-主从复制应用场景"><a href="#4-4-主从复制应用场景" class="headerlink" title="4.4 主从复制应用场景"></a>4.4 主从复制应用场景</h3><ul>
 <li>主从复制可以用来支持读写分离</li>
 <li>slave服务器设定为只读，可以用在数据安全的场景下</li>
 <li>可以使用主从复制来避免master持久化造成的开销。master关闭持久化，slave配置为不定期保存或是启用AOF。（注意：重新启动的master程序将从一个空数据集开始，如果一个slave试图与它同步，那么这个slave也会被清空，<strong>该问题可以使用将一个从节点设置为主节点后再启动需要重新启动的原主节点，或者保存从节点的持久化文件复制到主节点重启解决</strong>）</li>
 </ul>
 <p><img src="https://t1.picb.cc/uploads/2019/07/04/g4W3mK.png" alt="g4W3mK.png"></p>
-<h4 id="4-5主从复制的注意事项"><a href="#4-5主从复制的注意事项" class="headerlink" title="4.5主从复制的注意事项"></a>4.5主从复制的注意事项</h4><h5 id="4-5-1读写分离场景"><a href="#4-5-1读写分离场景" class="headerlink" title="4.5.1读写分离场景"></a>4.5.1读写分离场景</h5><ul>
+<h3 id="4-5-主从复制的注意事项"><a href="#4-5-主从复制的注意事项" class="headerlink" title="4.5 主从复制的注意事项"></a>4.5 主从复制的注意事项</h3><h4 id="4-5-1-读写分离场景"><a href="#4-5-1-读写分离场景" class="headerlink" title="4.5.1 读写分离场景"></a>4.5.1 读写分离场景</h4><ul>
 <li>数据复制延时导致读到过期数据或者读不到数据（网络原因、slave阻塞）</li>
 <li>从节点故障（多个client如何迁移）</li>
 </ul>
-<h5 id="4-5-2全量复制情况下"><a href="#4-5-2全量复制情况下" class="headerlink" title="4.5.2全量复制情况下"></a>4.5.2全量复制情况下</h5><ul>
+<h4 id="4-5-2-全量复制情况下"><a href="#4-5-2-全量复制情况下" class="headerlink" title="4.5.2 全量复制情况下"></a>4.5.2 全量复制情况下</h4><ul>
 <li>第一次建立主从关系或者runid不匹配会导致全量复制</li>
 <li>故障转移的时候会出现全量复制</li>
 </ul>
-<h5 id="4-5-3复制风暴"><a href="#4-5-3复制风暴" class="headerlink" title="4.5.3复制风暴"></a>4.5.3复制风暴</h5><ul>
+<h4 id="4-5-3-复制风暴"><a href="#4-5-3-复制风暴" class="headerlink" title="4.5.3 复制风暴"></a>4.5.3 复制风暴</h4><ul>
 <li>master故障重启，如果slave节点较多，所有slave都要复制，对服务器的性能，网络的压力都有很大影响</li>
 <li>一个机器部署了多个master</li>
 </ul>
-<h5 id="4-5-4写能力有限"><a href="#4-5-4写能力有限" class="headerlink" title="4.5.4写能力有限"></a>4.5.4写能力有限</h5><p>主从复制还是只有一台master，提供的写服务能力有限</p>
-<h5 id="4-5-5master故障情况下"><a href="#4-5-5master故障情况下" class="headerlink" title="4.5.5master故障情况下"></a>4.5.5master故障情况下</h5><ul>
+<h4 id="4-5-4-写能力有限"><a href="#4-5-4-写能力有限" class="headerlink" title="4.5.4 写能力有限"></a>4.5.4 写能力有限</h4><p>主从复制还是只有一台master，提供的写服务能力有限</p>
+<h4 id="4-5-5-master故障情况下"><a href="#4-5-5-master故障情况下" class="headerlink" title="4.5.5 master故障情况下"></a>4.5.5 master故障情况下</h4><ul>
 <li>如果是master无持久化，slave开启持久化来保留数据的场景，建议不要配置redis自动重启</li>
 <li>启动redis自动重启，master启动后，无备份数据，可能导致集群数据丢失情况</li>
 </ul>
-<h5 id="4-5-6带有效期的key"><a href="#4-5-6带有效期的key" class="headerlink" title="4.5.6带有效期的key"></a>4.5.6带有效期的key</h5><ul>
+<h4 id="4-5-6-带有效期的key"><a href="#4-5-6-带有效期的key" class="headerlink" title="4.5.6 带有效期的key"></a>4.5.6 带有效期的key</h4><ul>
 <li>slave不会让key过期，而是等待master让key过期</li>
 <li>在lua脚本执行期间，不执行任何key过期操作</li>
 </ul>
-<h3 id="5-Redis哨兵高可用机制"><a href="#5-Redis哨兵高可用机制" class="headerlink" title="5. Redis哨兵高可用机制"></a>5. Redis哨兵高可用机制</h3><h4 id="5-1哨兵-Sentinel-机制核心作用"><a href="#5-1哨兵-Sentinel-机制核心作用" class="headerlink" title="5.1哨兵(Sentinel)机制核心作用"></a>5.1哨兵(Sentinel)机制核心作用</h4><p><img src="https://t1.picb.cc/uploads/2019/07/06/g4spUe.png" alt="g4spUe.png"></p>
+<h2 id="5-Redis哨兵高可用机制"><a href="#5-Redis哨兵高可用机制" class="headerlink" title="5. Redis哨兵高可用机制"></a>5. Redis哨兵高可用机制</h2><h3 id="5-1-哨兵-Sentinel-机制核心作用"><a href="#5-1-哨兵-Sentinel-机制核心作用" class="headerlink" title="5.1 哨兵(Sentinel)机制核心作用"></a>5.1 哨兵(Sentinel)机制核心作用</h3><p><img src="https://t1.picb.cc/uploads/2019/07/06/g4spUe.png" alt="g4spUe.png"></p>
 <p>slaveof no one</p>
 <p>客户端获取主服务器命令：sentinel get-master-addr-by-name masterName</p>
-<h4 id="5-2-核心运作流程"><a href="#5-2-核心运作流程" class="headerlink" title="5.2 核心运作流程"></a>5.2 核心运作流程</h4><h5 id="5-2-1服务发现和健康检查流程"><a href="#5-2-1服务发现和健康检查流程" class="headerlink" title="5.2.1服务发现和健康检查流程"></a>5.2.1服务发现和健康检查流程</h5><ol>
+<h3 id="5-2-核心运作流程"><a href="#5-2-核心运作流程" class="headerlink" title="5.2 核心运作流程"></a>5.2 核心运作流程</h3><h4 id="5-2-1-服务发现和健康检查流程"><a href="#5-2-1-服务发现和健康检查流程" class="headerlink" title="5.2.1 服务发现和健康检查流程"></a>5.2.1 服务发现和健康检查流程</h4><ol>
 <li>搭建redis主从集群</li>
 <li>启动哨兵（客户端通过哨兵发现redis实例信息）</li>
 <li>哨兵通过连接master发现主从集群内的所有实例信息</li>
 <li>哨兵监控redis实例的监控状况</li>
 </ol>
-<h5 id="5-2-2故障切换流程"><a href="#5-2-2故障切换流程" class="headerlink" title="5.2.2故障切换流程"></a>5.2.2故障切换流程</h5><ol>
+<h4 id="5-2-2故障切换流程"><a href="#5-2-2故障切换流程" class="headerlink" title="5.2.2故障切换流程"></a>5.2.2故障切换流程</h4><ol>
 <li>哨兵一旦发现master不能正常提供服务，则通知给其他哨兵</li>
 <li>当一定数量的哨兵都认为master挂了</li>
 <li>选举一个哨兵作为故障转移的执行者</li>
 <li>执行者在slave中选取一个作为新的master</li>
 <li>将其他slave重新设定为新master的从属</li>
 </ol>
-<h4 id="5-3-七大核心概念"><a href="#5-3-七大核心概念" class="headerlink" title="5.3 七大核心概念"></a>5.3 七大核心概念</h4><ol>
+<h3 id="5-3-七大核心概念"><a href="#5-3-七大核心概念" class="headerlink" title="5.3 七大核心概念"></a>5.3 七大核心概念</h3><ol>
 <li>哨兵如何知道redis主从信息（自动发现机制）</li>
 <li>什么是master主观下线</li>
 <li>什么是客观下线</li>
@@ -661,7 +901,7 @@ slave-read-only yes</code></pre>
 <li>slave选举机制</li>
 <li>最终主从切换的过程</li>
 </ol>
-<h4 id="5-4哨兵启动和配置"><a href="#5-4哨兵启动和配置" class="headerlink" title="5.4哨兵启动和配置"></a>5.4哨兵启动和配置</h4><p>启动命令： redis-server /path/to/sentinel.conf  –sentinel</p>
+<h3 id="5-4-哨兵启动和配置"><a href="#5-4-哨兵启动和配置" class="headerlink" title="5.4 哨兵启动和配置"></a>5.4 哨兵启动和配置</h3><p>启动命令： redis-server /path/to/sentinel.conf  –sentinel</p>
 <p>配置文件启动时指定，<strong>运行过程中会自动变更</strong>，记录哨兵的检测结果</p>
 <pre><code class="shell">#配置文件在sentinel运行期间是会被动态修改的
 #sentinel如果重启时，就可以根据这个配置来恢复其之前所监控的redis集群的状态
@@ -684,17 +924,17 @@ sentinel down-after-milliseconds mymaster 1000
 sentinel failover-timeout mymaster 3000
 #指定了在执行故障转移时，最多可以有多少个从redis实例在同步新的主实例，在从redis实例较多的情况下，这个数字越小，同步的时间越长，完成故障转移需要的时间就越长
 sentinel parallel-syncs mymaster 1</code></pre>
-<h4 id="5-5-哨兵如何知道redis的主从信息"><a href="#5-5-哨兵如何知道redis的主从信息" class="headerlink" title="5.5 哨兵如何知道redis的主从信息"></a>5.5 哨兵如何知道redis的主从信息</h4><p>哨兵配置文件中，保存着主从集群中master的信息，可以通过<strong>info</strong>命令，进行主从信息的自动发现</p>
+<h3 id="5-5-哨兵如何知道主从信息"><a href="#5-5-哨兵如何知道主从信息" class="headerlink" title="5.5 哨兵如何知道主从信息"></a>5.5 哨兵如何知道主从信息</h3><p>哨兵配置文件中，保存着主从集群中master的信息，可以通过<strong>info</strong>命令，进行主从信息的自动发现</p>
 <p><img src="https://t1.picb.cc/uploads/2019/07/06/g4zjov.png" alt="g4zjov.png"></p>
-<h4 id="5-6主观下线sdown"><a href="#5-6主观下线sdown" class="headerlink" title="5.6主观下线sdown"></a>5.6主观下线sdown</h4><p>主观下线：单个哨兵自身认为redis实例已经不能提供服务</p>
+<h3 id="5-6-主观下线sdown"><a href="#5-6-主观下线sdown" class="headerlink" title="5.6 主观下线sdown"></a>5.6 主观下线sdown</h3><p>主观下线：单个哨兵自身认为redis实例已经不能提供服务</p>
 <p>检测机制：哨兵向redis发送ping请求，+PONG、-LOADING、-MASTERDOWN这三种情况视为正常，其他回复均为无效。</p>
 <p><img src="https://t1.picb.cc/uploads/2019/07/06/g4z0ci.png" alt="g4z0ci.png"></p>
 <p>对应配置文件的配置项为：<strong>sentinel down-after-milliseconds mymaster 1000</strong></p>
-<h4 id="5-7-客观下线odown"><a href="#5-7-客观下线odown" class="headerlink" title="5.7 客观下线odown"></a>5.7 客观下线odown</h4><p>客观下线：一定数量值的哨兵认为master已经下线；</p>
+<h3 id="5-7-客观下线odown"><a href="#5-7-客观下线odown" class="headerlink" title="5.7 客观下线odown"></a>5.7 客观下线odown</h3><p>客观下线：一定数量值的哨兵认为master已经下线；</p>
 <p>检测机制： 当哨兵主观认为master下线后，则会通过<strong>sentinel is-master-down-by addr</strong> 命令询问其他哨兵是否认为master已下线，如果达成共识（<strong>达到quorum个数</strong>），就会认为master节点客观下线，开始故障转移流程</p>
 <p><img src="https://t1.picb.cc/uploads/2019/07/06/g4zFiw.png" alt="g4zFiw.png"></p>
 <p>对应配置文件的配置项： <strong>sentinel monitor mymaster ip port <em>2</em></strong></p>
-<h4 id="5-8-哨兵之间如何通信"><a href="#5-8-哨兵之间如何通信" class="headerlink" title="5.8 哨兵之间如何通信"></a>5.8 哨兵之间如何通信</h4><ol>
+<h3 id="5-8-哨兵之间如何通信"><a href="#5-8-哨兵之间如何通信" class="headerlink" title="5.8 哨兵之间如何通信"></a>5.8 哨兵之间如何通信</h3><ol>
 <li><p>哨兵之间的自动发现</p>
 <p><img src="https://t1.picb.cc/uploads/2019/07/06/g4DkyM.png" alt="g4DkyM.png"></p>
 </li>
@@ -709,7 +949,7 @@ sentinel parallel-syncs mymaster 1</code></pre>
 <p>查看相关主题：<strong>pubsub channels</strong></p>
 <p>订阅主体：<strong>subscribe 主题名称</strong></p>
 <p><img src="https://t1.picb.cc/uploads/2019/07/06/g4zRx8.png" alt="g4zRx8.png"></p>
-<h4 id="5-9哨兵领导选举机制"><a href="#5-9哨兵领导选举机制" class="headerlink" title="5.9哨兵领导选举机制"></a>5.9哨兵领导选举机制</h4><p>基于Raft算法实现的选举机制，流程简述如下：</p>
+<h3 id="5-9-哨兵领导选举机制"><a href="#5-9-哨兵领导选举机制" class="headerlink" title="5.9 哨兵领导选举机制"></a>5.9 哨兵领导选举机制</h3><p>基于Raft算法实现的选举机制，流程简述如下：</p>
 <ol>
 <li>拉票阶段： 每个哨兵节点希望自己成为领导者<strong>选举前每个sentinel都会随机睡眠一段时间后才开始拉票，避免了大家都同时触发</strong></li>
 <li>sentinel节点收到拉票命令后，如果没有收到或同意过其他sentinel节点的请求，就同意该sentinel节点的请求（每个sentinel只持有一个同意票数）</li>
@@ -720,7 +960,7 @@ sentinel parallel-syncs mymaster 1</code></pre>
 <p><a href="https://raft.github.io" target="_blank" rel="noopener">https://raft.github.io</a></p>
 <p><a href="http://thesecretlivesofdata.com" target="_blank" rel="noopener">http://thesecretlivesofdata.com</a></p>
 <p><strong><a href="http://thesecretlivesofdata.com/raft/" target="_blank" rel="noopener">http://thesecretlivesofdata.com/raft/</a></strong></p>
-<h4 id="5-10-slave选举方案"><a href="#5-10-slave选举方案" class="headerlink" title="5.10 slave选举方案"></a>5.10 slave选举方案</h4><p>从服务器实例中，按下面顺序依次筛选</p>
+<h3 id="5-10-slave选举方案"><a href="#5-10-slave选举方案" class="headerlink" title="5.10 slave选举方案"></a>5.10 slave选举方案</h3><p>从服务器实例中，按下面顺序依次筛选</p>
 <p>1.slave节点状态，非S_DOWN、O_DOWN、DISCONNECTED</p>
 <p>判断规则：（down-after-milliseconds*10）+milliseconds_since_master_is_in_SDOWN_state</p>
 <p>SENTINEL slaves mymaster</p>
@@ -730,19 +970,19 @@ sentinel parallel-syncs mymaster 1</code></pre>
 <p>Replication offset processed</p>
 <p>4.最小的run id</p>
 <p>run id比较顺序：字典顺序，ASCII码</p>
-<h4 id="5-11-最终主从切换的过程"><a href="#5-11-最终主从切换的过程" class="headerlink" title="5.11 最终主从切换的过程"></a>5.11 最终主从切换的过程</h4><p>1、针对即将成为master的slave节点，将其撤出主从集群</p>
+<h3 id="5-11-最终主从切换的过程"><a href="#5-11-最终主从切换的过程" class="headerlink" title="5.11 最终主从切换的过程"></a>5.11 最终主从切换的过程</h3><p>1、针对即将成为master的slave节点，将其撤出主从集群</p>
 <p>自动执行: slaveof NO ONE</p>
 <p>2、针对其他slave节点，使他们成为新master的从属</p>
 <p>自动执行：slaveof new_master_host new_master_port</p>
-<h4 id="5-12-哨兵服务部署方案"><a href="#5-12-哨兵服务部署方案" class="headerlink" title="5.12 哨兵服务部署方案"></a>5.12 哨兵服务部署方案</h4><p><img src="https://t1.picb.cc/uploads/2019/07/06/g4DwDr.png" alt="g4DwDr.png"></p>
-<h3 id="6-Redis集群分片存储"><a href="#6-Redis集群分片存储" class="headerlink" title="6. Redis集群分片存储"></a>6. Redis集群分片存储</h3><h4 id="6-1-为什么要分片存储"><a href="#6-1-为什么要分片存储" class="headerlink" title="6.1 为什么要分片存储"></a>6.1 为什么要分片存储</h4><p>示例：公司用户量3千万，用户基本信息缓存在redis中，需要内存10G，如何设计Redis的缓存架构？</p>
+<h3 id="5-12-哨兵服务部署方案"><a href="#5-12-哨兵服务部署方案" class="headerlink" title="5.12 哨兵服务部署方案"></a>5.12 哨兵服务部署方案</h3><p><img src="https://t1.picb.cc/uploads/2019/07/06/g4DwDr.png" alt="g4DwDr.png"></p>
+<h2 id="6-Redis集群分片存储"><a href="#6-Redis集群分片存储" class="headerlink" title="6. Redis集群分片存储"></a>6. Redis集群分片存储</h2><h3 id="6-1-为什么要分片存储"><a href="#6-1-为什么要分片存储" class="headerlink" title="6.1 为什么要分片存储"></a>6.1 为什么要分片存储</h3><p>示例：公司用户量3千万，用户基本信息缓存在redis中，需要内存10G，如何设计Redis的缓存架构？</p>
 <p>1、3千万用户，各种业务场景对用户信息的访问量很大（单台redis示例的读写瓶颈凸显）</p>
 <p>2、单redis示例管理10G内存，必然影响处理效率</p>
 <p>3、redis的内存需求可能超过机器的最大内存</p>
 <p>故此，引出分片存储的技术。</p>
-<h4 id="6-2-官方集群方案"><a href="#6-2-官方集群方案" class="headerlink" title="6.2 官方集群方案"></a>6.2 官方集群方案</h4><p>redis cluster是redis的分布式集群解决方案，在3.0版本推出后有效解决了redis分布式方面的需求，实现了数据在多个redis节点之间自动分片、故障自动转移、扩容机制等功能。</p>
+<h3 id="6-2-官方集群方案"><a href="#6-2-官方集群方案" class="headerlink" title="6.2  官方集群方案"></a>6.2  官方集群方案</h3><p>redis cluster是redis的分布式集群解决方案，在3.0版本推出后有效解决了redis分布式方面的需求，实现了数据在多个redis节点之间自动分片、故障自动转移、扩容机制等功能。</p>
 <p>？？？图</p>
-<h4 id="6-3-搭建集群"><a href="#6-3-搭建集群" class="headerlink" title="6.3 搭建集群"></a>6.3 搭建集群</h4><ul>
+<h3 id="6-3-搭建集群"><a href="#6-3-搭建集群" class="headerlink" title="6.3  搭建集群"></a>6.3  搭建集群</h3><ul>
 <li>准备6个独立的redis服务</li>
 <li>通过redis-cli工具创建集群</li>
 <li>检验集群</li>
@@ -751,7 +991,7 @@ sentinel parallel-syncs mymaster 1</code></pre>
 <li>集群节点删除</li>
 </ul>
 <p><em>集群搭建参考redis集群搭建</em></p>
-<h4 id="6-4-集群常见问题"><a href="#6-4-集群常见问题" class="headerlink" title="6.4 集群常见问题"></a>6.4 集群常见问题</h4><ol>
+<h3 id="6-4-集群常见问题"><a href="#6-4-集群常见问题" class="headerlink" title="6.4 集群常见问题"></a>6.4 集群常见问题</h3><ol>
 <li><p><strong>增加了slot槽的计算，是否比单机性能差？</strong></p>
 <p>共16384个槽，slots槽计算方式是公开的，HASH_SLOT=CRC16(KEY) mod 16384;</p>
 <p>为了避免每次都需要服务器计算重定向，优秀的java客户端都实现了本地计算，并且缓存服务器slots分配，有变动时再更新本地内容，从而避免了多次重定向带来的性能消耗。</p>
@@ -792,11 +1032,11 @@ sentinel parallel-syncs mymaster 1</code></pre>
 <p>注意：主从节点仍存在数据不一致的问题</p>
 </li>
 </ol>
-<h4 id="6-5-非官方集群方案"><a href="#6-5-非官方集群方案" class="headerlink" title="6.5 非官方集群方案"></a>6.5 非官方集群方案</h4><p> codis  A Redis Cluster Solution：豌豆荚团队开源产品</p>
+<h3 id="6-5-非官方集群方案"><a href="#6-5-非官方集群方案" class="headerlink" title="6.5 非官方集群方案"></a>6.5 非官方集群方案</h3><p> codis  A Redis Cluster Solution：豌豆荚团队开源产品</p>
 <p>twemproxy：推特开源产品</p>
-<h3 id="7-Redis监控"><a href="#7-Redis监控" class="headerlink" title="7. Redis监控"></a>7. Redis监控</h3><h4 id="7-1-Monitor命令"><a href="#7-1-Monitor命令" class="headerlink" title="7.1 Monitor命令"></a>7.1 Monitor命令</h4><p>monitor 是一个调试命令，返回服务器处理的每个命令。对于发现程序的错误非常有用。出于安全考虑，某些特殊管理命令CONFIG不会记录到Monitor输出。</p>
+<h2 id="7-Redis监控"><a href="#7-Redis监控" class="headerlink" title="7. Redis监控"></a>7. Redis监控</h2><h3 id="7-1-Monitor命令"><a href="#7-1-Monitor命令" class="headerlink" title="7.1 Monitor命令"></a>7.1 Monitor命令</h3><p>monitor 是一个调试命令，返回服务器处理的每个命令。对于发现程序的错误非常有用。出于安全考虑，某些特殊管理命令CONFIG不会记录到Monitor输出。</p>
 <p>注意： 运行一个monitor命令能够降低50%的吞吐量，运行多个会降低更多；</p>
-<h4 id="7-2-info命令"><a href="#7-2-info命令" class="headerlink" title="7.2 info命令"></a>7.2 info命令</h4><p>info命令以一种易于理解和阅读的格式，返回关于redis服务器的各种信息和统计数值；</p>
+<h3 id="7-2-info命令"><a href="#7-2-info命令" class="headerlink" title="7.2 info命令"></a>7.2 info命令</h3><p>info命令以一种易于理解和阅读的格式，返回关于redis服务器的各种信息和统计数值；</p>
 <table>
 <thead>
 <tr>
@@ -847,7 +1087,7 @@ sentinel parallel-syncs mymaster 1</code></pre>
 </tbody></table>
 <p>注：可以通过section返回部分信息</p>
 <p><strong>参考info命令详解文档</strong></p>
-<h4 id="7-3-图形化监控工具-RedisLive"><a href="#7-3-图形化监控工具-RedisLive" class="headerlink" title="7.3 图形化监控工具-RedisLive"></a>7.3 图形化监控工具-RedisLive</h4><p><strong>参考redisLive安装文档</strong></p>
+<h3 id="7-3-图形化监控工具-RedisLive"><a href="#7-3-图形化监控工具-RedisLive" class="headerlink" title="7.3 图形化监控工具-RedisLive"></a>7.3 图形化监控工具-RedisLive</h3><p><strong>参考redisLive安装文档</strong></p>
 
             </div>
             <hr>
@@ -1046,31 +1286,32 @@ sentinel parallel-syncs mymaster 1</code></pre>
         
         <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
-            </div>
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/07/04/Redis/">
+                <a href="/2019/07/07/分布式一致性hash算法/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Redis">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="分布式一致性hash算法">
                         
-                        <span class="card-title">Redis</span>
+                        <span class="card-title">分布式一致性hash算法</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1. redis基础1.1常用数据类型redis是内存型key-value日志型数据库，数据类型是相对于value而言。
-string 字符串类型
-hash hash类型、key-value hashmap类型
-list    列表类型、数
+                            1.一致性hash算法应用领域缓存、ES、hadoop、分布式数据库
+分布式数据存储场景下需要一致性hash算法
+2.一致性hash详解以缓存为例：
+使用缓存目的：提升数据访问性能，缓解数据库压力。以空间换时间
+单机缓存
+常用缓存中间件： 
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-07-04
-                            </span>
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-07-07
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-user fa-fw"></i>
@@ -1079,16 +1320,11 @@ list    列表类型、数
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/缓存/" target="_blank">
-                        <span class="chip bg-color">缓存</span>
-                    </a>
-                    
-                    <a href="/tags/redis/" target="_blank">
-                        <span class="chip bg-color">redis</span>
+                    <a href="/tags/分布式架构/" target="_blank">
+                        <span class="chip bg-color">分布式架构</span>
                     </a>
                     
                 </div>
